@@ -17,6 +17,11 @@ import TextClassificationPage from '@pages/TextClassificationPage';
 import DocumentationPage from '@pages/DocumentationPage';
 import ExperimentationPage from '@pages/ExperimentationPage';
 import AboutPage from '@pages/AboutPage';
+import DecisionTreePage from '@pages/DecisionTreePage';
+import KMeansPage from '@pages/KMeansPage';
+import LinearRegressionPage from '@pages/LinearRegressionPage';
+
+
 
 // Hook pour les notifications
 import { useApp } from '@context/AppContext';
@@ -35,7 +40,13 @@ const AppContent = () => {
           <Route path={ROUTES.IMAGE_RECOGNITION} element={<ImageRecognitionPage />} />
           <Route path={ROUTES.TEXT_CLASSIFICATION} element={<TextClassificationPage />} />
           <Route path={ROUTES.DOCUMENTATION} element={<DocumentationPage />} />
+          <Route path={ROUTES.LinearRegressionPage} element={<LinearRegressionPage />} />
+
           <Route path={ROUTES.EXPERIMENTATION} element={<ExperimentationPage />} />
+          <Route path={ROUTES.DecisionTreePage} element={<DecisionTreePage />} />
+          <Route path={ROUTES.KMeansPage} element={<KMeansPage />} />
+
+
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
         </Routes>
       </main>

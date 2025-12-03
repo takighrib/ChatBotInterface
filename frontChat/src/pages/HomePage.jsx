@@ -4,6 +4,7 @@ import { Sparkles, MessageSquare, Image, FileText, BookOpen, Lightbulb, ArrowRig
 import { ROUTES } from '@constants/routes';
 import { InteractiveCard } from '@components/common/Card';
 import Button from '@components/common/Button';
+import KMeansPage from '@pages/KMeansPage';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,14 @@ const HomePage = () => {
       color: "from-blue-500 to-cyan-500",
       route: ROUTES.CHATBOT
     },
+    {
+      icon: <Lightbulb className="w-8 h-8" />,
+      title: "Clustering K-Means",
+      description: "Visualise comment K-Means regroupe les données en clusters",
+      color: "from-orange-500 to-yellow-500",
+      route: ROUTES.KMeansPage
+    },
+
     {
       icon: <Image className="w-8 h-8" />,
       title: "Reconnaissance d'Image",
@@ -64,16 +73,16 @@ const HomePage = () => {
             <Sparkles className="w-5 h-5 text-purple-600" />
             <span className="text-sm font-semibold text-gray-700">Plateforme d'apprentissage IA</span>
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
             Découvre l'Intelligence
             <span className="block gradient-text">Artificielle</span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Explore, expérimente et apprends comment fonctionne l'IA à travers des modules interactifs et ludiques !
           </p>
-          
+
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button
               variant="primary"
@@ -130,7 +139,7 @@ const HomePage = () => {
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
             Pourquoi apprendre avec nous ?
           </h3>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="flex space-x-4">
