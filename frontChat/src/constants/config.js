@@ -18,7 +18,8 @@ export const STORAGE_KEYS = {
   USER_PROGRESS: 'user_progress',
   CHAT_HISTORY: 'chat_history',
   PROJECTS: 'user_projects',
-  SETTINGS: 'user_settings'
+  SETTINGS: 'user_settings',
+  CHAT_SESSIONS: 'chat_sessions'
 };
 
 export const API_TIMEOUT = 30000; // 30 seconds

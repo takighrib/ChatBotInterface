@@ -1,10 +1,14 @@
 import React from 'react';
-import { Bot, User, Copy, Check } from 'lucide-react';
+import { Bot, User, Copy, Check, Info } from 'lucide-react';
 import { useState } from 'react';
 
 const MessageBubble = ({ message }) => {
   const [copied, setCopied] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const isUser = message.role === 'user';
+  const planItems = !isUser && Array.isArray(message?.agentData?.plan)
+    ? message.agentData.plan.filter(item => typeof item === 'string' && item.trim().length > 0)
+    : [];
 
   const handleCopy = () => {
     navigator.clipboard.writeText(message.content);
@@ -37,6 +41,19 @@ const MessageBubble = ({ message }) => {
           <p className="text-sm md:text-base whitespace-pre-wrap break-words">
             {message.content}
           </p>
+
+          {planItems.length > 0 && (
+            <div className="mt-3 rounded-xl border border-gray-200 bg-white/70 p-3 text-left">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">Plan d'apprentissage</div>
+              <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-gray-800">
+                {planItems.map((item, index) => (
+                  <li key={`${message.id}-plan-${index}`}>
+                    {item.replace(/^\d+\.?\s*/, '') || item}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
         {/* Metadata */}
@@ -55,19 +72,37 @@ const MessageBubble = ({ message }) => {
           )}
 
           {!isUser && (
-            <button
-              onClick={handleCopy}
-              className="text-gray-400 hover:text-gray-600 transition"
-              title="Copier le message"
-            >
-              {copied ? (
-                <Check className="w-4 h-4 text-green-600" />
-              ) : (
-                <Copy className="w-4 h-4" />
-              )}
-            </button>
+            <>
+              <button
+                onClick={handleCopy}
+                className="text-gray-400 hover:text-gray-600 transition"
+                title="Copier le message"
+              >
+                {copied ? (
+                  <Check className="w-4 h-4 text-green-600" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </button>
+              
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className={`transition ${showDetails ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Voir les détails techniques"
+              >
+                <Info className="w-4 h-4" />
+              </button>
+            </>
           )}
         </div>
+
+        {/* Technical Details Panel */}
+        {showDetails && !isUser && (
+          <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono text-gray-600 overflow-x-auto animate-fade-in">
+            <div className="font-semibold mb-1 text-gray-700">Résultat de l'agent :</div>
+            <pre>{JSON.stringify(message, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -63,6 +63,85 @@ export const chatbotAPI = {
   },
 
   /**
+   * Envoie un message au chatbot (Real Backend)
+   * @param {string} message - Le message de l'utilisateur
+   * @param {string} sessionId - ID de session (optionnel)
+   * @returns {Promise<Object>} Réponse du chatbot
+   */
+  sendMessageReal: async (message, sessionId = null) => {
+    try {
+      let response;
+      
+      // Si pas de session ou message de démarrage, on initialise
+      if (!sessionId && (message.toLowerCase().includes('start') || message.toLowerCase().includes('commencer'))) {
+        response = await apiClient.post('/chat/start', {
+          topic: message
+        });
+      } else {
+        // Sinon on envoie un message normal
+        // Si pas de session, on en crée une implicitement avec un topic par défaut si nécessaire
+        if (!sessionId) {
+           response = await apiClient.post('/chat/start', {
+            topic: message
+          });
+        } else {
+          response = await apiClient.post('/chat/message', {
+            message,
+            sessionId
+          });
+        }
+      }
+
+      return {
+        success: true,
+        data: {
+          message: response.data.message,
+          timestamp: new Date().toISOString(),
+          confidence: 1.0,
+          sessionId: response.data.sessionId,
+          state: response.data.state,
+          topic: response.data.topic,
+          plan: response.data.plan,
+          segments: response.data.segments
+        }
+      };
+    } catch (error) {
+      return handleApiError(error);
+    }
+  },
+
+  /**
+   * Récupère la liste des conversations sauvegardées dans MongoDB
+   */
+  listHistories: async () => {
+    try {
+      const response = await apiClient.get('/chat/history');
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error) {
+      return handleApiError(error);
+    }
+  },
+
+  /**
+   * Récupère une conversation sauvegardée complète
+   * @param {string} historyId - Identifiant MongoDB
+   */
+  getHistoryById: async (historyId) => {
+    try {
+      const response = await apiClient.get(`/chat/history/${historyId}`);
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error) {
+      return handleApiError(error);
+    }
+  },
+
+  /**
    * MODE DÉMO : Simule une réponse du chatbot (sans backend)
    */
   sendMessageDemo: async (message) => {

@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { APP_CONFIG, API_TIMEOUT } from '@constants/config';
 
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL?.trim() ||
+  'http://127.0.0.1:8000'; // no /api suffix
+
 // Instance Axios principale
 export const apiClient = axios.create({
-  baseURL: APP_CONFIG.api.baseUrl,
-  timeout: API_TIMEOUT,
+  baseURL: API_BASE_URL,
+  timeout: API_TIMEOUT || 20000,
   headers: {
     'Content-Type': 'application/json'
   }
