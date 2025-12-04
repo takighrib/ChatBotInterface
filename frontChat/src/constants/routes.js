@@ -1,6 +1,3 @@
-// ==============================
-// ROUTES : chemins de navigation
-// ==============================
 export const ROUTES = {
   HOME: '/',
   CHATBOT: '/chatbot',
@@ -8,18 +5,21 @@ export const ROUTES = {
   TEXT_CLASSIFICATION: '/text-classification',
   DOCUMENTATION: '/documentation',
   EXPERIMENTATION: '/experimentation',
+  LINEAR_REGRESSION: '/linear-regression',
+  DECISION_TREE: '/decision-tree',
+  KMEANS: '/kmeans',
+  NEURAL_NETWORK: '/neural-network',
   ABOUT: '/about',
-
-  // === Routes IA avancées ===
-  DecisionTreePage: '/decision-tree',
-  KMeansPage: '/kmeans',
-  LinearRegressionPage: '/linear-regression',
-  NeuralNetworkPage: '/neural-network'
+  LOGIN: '/login',
+  REGISTER: '/register',
+  BLOG: '/blog',
+  BLOG_CREATE: '/blog/create',
+  BLOG_ARTICLE: '/blog/:id',
+  BLOG_EDIT: '/blog/edit/:id'
 };
 
-
 // ======================================
-// NAV_ITEMS : éléments visibles dans le menu
+// NAV_ITEMS : Navigation principale (Header)
 // ======================================
 export const NAV_ITEMS = [
   {
@@ -43,35 +43,136 @@ export const NAV_ITEMS = [
     icon: 'FileText'
   },
   {
-    name: 'Documentation',
+    name: 'ML Lab',
+    path: ROUTES.EXPERIMENTATION,
+    icon: 'Lightbulb'
+  },
+  {
+    name: 'Docs',
     path: ROUTES.DOCUMENTATION,
     icon: 'BookOpen'
   },
   {
-    name: 'Mes Projets',
-    path: ROUTES.EXPERIMENTATION,
-    icon: 'Lightbulb'
+    name: 'À propos',
+    path: ROUTES.ABOUT,
+    icon: 'Info'
   },
-
-  // === Modules IA interactifs ===
   {
-    name: 'Decision Tree',
-    path: ROUTES.DecisionTreePage,
-    icon: 'GitBranch'
+    name: 'Blog',
+    path: ROUTES.BLOG,
+    icon: 'BookOpen'
+  }
+];
+
+// ======================================
+// ML_MODULES : Modules d'apprentissage ML
+// ======================================
+export const ML_MODULES = [
+  {
+    name: 'Régression Linéaire',
+    path: ROUTES.LINEAR_REGRESSION,
+    icon: 'TrendingUp',
+    description: 'Prédire des valeurs continues',
+    category: 'supervised',
+    difficulty: 'beginner'
+  },
+  {
+    name: 'Arbre de Décision',
+    path: ROUTES.DECISION_TREE,
+    icon: 'GitBranch',
+    description: 'Classification par arbre',
+    category: 'supervised',
+    difficulty: 'intermediate'
   },
   {
     name: 'K-Means',
-    path: ROUTES.KMeansPage,
-    icon: 'ScatterPlot'
+    path: ROUTES.KMEANS,
+    icon: 'Circle',
+    description: 'Clustering non supervisé',
+    category: 'unsupervised',
+    difficulty: 'intermediate'
   },
   {
-    name: 'Linear Regression',
-    path: ROUTES.LinearRegressionPage,
-    icon: 'TrendingUp'
-  },
-  {
-    name: 'Neural Network',
-    path: ROUTES.NeuralNetworkPage,
-    icon: 'Network'
+    name: 'Réseau de Neurones',
+    path: ROUTES.NEURAL_NETWORK,
+    icon: 'Network',
+    description: 'Deep Learning basique',
+    category: 'deep-learning',
+    difficulty: 'advanced'
   }
 ];
+
+// ======================================
+// ML_CATEGORIES : Catégories des modules
+// ======================================
+export const ML_CATEGORIES = {
+  supervised: {
+    name: 'Apprentissage Supervisé',
+    description: 'Apprendre à partir de données étiquetées',
+    color: 'blue'
+  },
+  unsupervised: {
+    name: 'Apprentissage Non Supervisé',
+    description: 'Découvrir des patterns dans les données',
+    color: 'purple'
+  },
+  'deep-learning': {
+    name: 'Deep Learning',
+    description: 'Réseaux de neurones profonds',
+    color: 'green'
+  }
+};
+
+// ======================================
+// DIFFICULTY_LEVELS : Niveaux de difficulté
+// ======================================
+export const DIFFICULTY_LEVELS = {
+  beginner: {
+    label: 'Débutant',
+    color: 'green',
+    icon: '🌱'
+  },
+  intermediate: {
+    label: 'Intermédiaire',
+    color: 'yellow',
+    icon: '🌿'
+  },
+  advanced: {
+    label: 'Avancé',
+    color: 'red',
+    icon: '🌳'
+  }
+};
+
+// ======================================
+// HELPER FUNCTIONS
+// ======================================
+
+/**
+ * Récupère les modules ML par catégorie
+ */
+export const getModulesByCategory = (category) => {
+  return ML_MODULES.filter(module => module.category === category);
+};
+
+/**
+ * Récupère les modules ML par difficulté
+ */
+export const getModulesByDifficulty = (difficulty) => {
+  return ML_MODULES.filter(module => module.difficulty === difficulty);
+};
+
+/**
+ * Vérifie si une route est publique (accessible sans connexion)
+ */
+export const isPublicRoute = (path) => {
+  const publicRoutes = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.ABOUT];
+  return publicRoutes.includes(path);
+};
+
+/**
+ * Récupère les infos d'un module par son path
+ */
+export const getModuleByPath = (path) => {
+  return ML_MODULES.find(module => module.path === path);
+};

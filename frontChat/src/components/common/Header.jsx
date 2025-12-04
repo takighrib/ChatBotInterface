@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Sparkles, Menu, X, LogOut, User } from 'lucide-react';
 import { NAV_ITEMS } from '@constants/routes';
+import { useAuth } from '@context/AuthContext';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
 
   const isActive = (path) => location.pathname === path;
 
@@ -16,6 +21,13 @@ const Header = () => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    setMobileMenuOpen(false);
+    navigate('/login');
+  };
 
   const onHome = location.pathname === '/';
   const headerClasses = onHome && !isScrolled
@@ -37,7 +49,7 @@ const Header = () => {
           </Link>
 
           {/* Navigation Desktop */}
-          <nav className="hidden md:flex space-x-1">
+          <nav className="hidden md:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.path}
@@ -51,6 +63,58 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+
+            {/* User Menu Desktop */}
+            {isAuthenticated ? (
+              <div className="relative ml-4">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-brand-mint/20 hover:bg-brand-mint/40 transition"
+                >
+                  <User className="w-5 h-5 text-brand-slate" />
+                  <span className="text-sm font-medium text-text-primary">
+                    {user?.email?.split('@')[0]}
+                  </span>
+                </button>
+
+                {/* Dropdown Menu */}
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-brand-grey/20 py-2 animate-fade-in">
+                    <div className="px-4 py-2 border-b border-brand-grey/20">
+                      <p className="text-sm font-medium text-text-primary">
+                        {user?.email}
+                      </p>
+                      <p className="text-xs text-text-secondary">
+                        Membre
+                      </p>
+                    </div>
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition flex items-center space-x-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Déconnexion</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2 ml-4">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 rounded-lg font-medium text-text-secondary hover:bg-brand-mint/40 transition"
+                >
+                  Connexion
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 rounded-lg font-medium bg-brand-mint text-text-primary hover:shadow-md transition"
+                >
+                  S'inscrire
+                </Link>
+              </div>
+            )}
           </nav>
 
           {/* Bouton Menu Mobile */}
@@ -84,10 +148,53 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+
+              {/* User Menu Mobile */}
+              {isAuthenticated ? (
+                <div className="pt-4 mt-4 border-t border-brand-grey/20">
+                  <div className="px-4 py-2 mb-2">
+                    <p className="text-sm font-medium text-text-primary">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full px-4 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 transition flex items-center space-x-2"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Déconnexion</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4 mt-4 border-t border-brand-grey/20 space-y-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 rounded-lg font-medium text-text-secondary hover:bg-brand-mint/40 transition"
+                  >
+                    Connexion
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 rounded-lg font-medium bg-brand-mint text-text-primary hover:shadow-md transition"
+                  >
+                    S'inscrire
+                  </Link>
+                </div>
+              )}
             </nav>
           </div>
         )}
       </div>
+
+      {/* Fermer le menu utilisateur si on clique ailleurs */}
+      {showUserMenu && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowUserMenu(false)}
+        />
+      )}
     </header>
   );
 };

@@ -2,7 +2,7 @@ export const APP_CONFIG = {
   name: import.meta.env.VITE_APP_NAME || 'IA Jeunes',
   version: import.meta.env.VITE_APP_VERSION || '1.0.0',
   api: {
-    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
     chatbot: import.meta.env.VITE_CHATBOT_API_URL || 'http://localhost:8000/api/chatbot',
     image: import.meta.env.VITE_IMAGE_API_URL || 'http://localhost:8000/api/image',
     text: import.meta.env.VITE_TEXT_API_URL || 'http://localhost:8000/api/text'
@@ -19,13 +19,11 @@ export const STORAGE_KEYS = {
   CHAT_HISTORY: 'chat_history',
   PROJECTS: 'user_projects',
   SETTINGS: 'user_settings',
-  CHAT_SESSIONS: 'chat_sessions'
+  CHAT_SESSIONS: 'chat_sessions',
+  AUTH_TOKEN: 'token'  // ← NOUVEAU
 };
 
-export const API_TIMEOUT = 30000; // 30 seconds
-
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
+export const API_TIMEOUT = 30000;
+export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-
 export const MAX_TEXT_LENGTH = 5000;

@@ -13,6 +13,8 @@ export default defineConfig({
       "@constants": path.resolve(__dirname, "./src/constants"),
       "@services": path.resolve(__dirname, "./src/services"),   // <== ajouté
       "@hooks": path.resolve(__dirname, "./src/hooks"),         // <== ajouté
+      "@utils": path.resolve(__dirname, "./src/utils")
+
     }
   }
 });

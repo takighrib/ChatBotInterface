@@ -2,13 +2,19 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppProvider } from '@context/AppContext';
 import { UserProgressProvider } from '@context/UserProgressContext';
+import { AuthProvider } from '@context/AuthContext';
 import { ROUTES } from '@constants/routes';
 
-// Layout components
+// Layout
 import Header from '@components/common/Header';
 import Footer from '@components/common/Footer';
 import { NotificationContainer } from '@components/common/Notification';
 import OnboardingModal from '@components/onboarding/OnboardingModal';
+
+// Auth components
+import LoginPage from '@components/auth/LoginPage';
+import RegisterPage from '@components/auth/RegisterPage';
+import ProtectedRoute from '@components/auth/ProtectedRoute';
 
 // Pages
 import HomePage from '@pages/HomePage';
@@ -22,10 +28,9 @@ import DecisionTreePage from '@pages/DecisionTreePage';
 import KMeansPage from '@pages/KMeansPage';
 import LinearRegressionPage from '@pages/LinearRegressionPage';
 import NeuralNetworkPage from '@pages/NeuralNetworkPage';
-
-
-
-// Hook pour les notifications
+import BlogPage from '@pages/BlogPage';
+import BlogCreatePage from '@pages/BlogCreatePage';
+import BlogArticlePage from '@pages/BlogArticlePage';
 import { useApp } from '@context/AppContext';
 
 const AppContent = () => {
@@ -46,35 +51,60 @@ const AppContent = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      
+
       <main className="flex-grow pt-16">
         <Routes>
-          <Route path={ROUTES.HOME} element={<HomePage />} />
-          <Route path={ROUTES.CHATBOT} element={<ChatbotPage />} />
-          <Route path={ROUTES.IMAGE_RECOGNITION} element={<ImageRecognitionPage />} />
-          <Route path={ROUTES.TEXT_CLASSIFICATION} element={<TextClassificationPage />} />
-          <Route path={ROUTES.DOCUMENTATION} element={<DocumentationPage />} />
-          <Route path={ROUTES.LinearRegressionPage} element={<LinearRegressionPage />} />
-
-          <Route path={ROUTES.EXPERIMENTATION} element={<ExperimentationPage />} />
-          <Route path={ROUTES.DecisionTreePage} element={<DecisionTreePage />} />
-          <Route path={ROUTES.KMeansPage} element={<KMeansPage />} />
-          <Route path={ROUTES.NeuralNetworkPage} element={<NeuralNetworkPage />} />
-
-
+          {/* Routes publiques */}
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+          
+          {/* Routes Blog - publiques */}
+          <Route path={ROUTES.BLOG} element={<BlogPage />} />
+          <Route path={ROUTES.BLOG_ARTICLE} element={<BlogArticlePage />} />
+          <Route path={ROUTES.BLOG_CREATE} element={
+            <ProtectedRoute><BlogCreatePage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.BLOG_EDIT} element={
+            <ProtectedRoute><BlogCreatePage /></ProtectedRoute>
+          } />
+
+          {/* Routes protégées */}
+          <Route path={ROUTES.HOME} element={
+            <ProtectedRoute><HomePage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.CHATBOT} element={
+            <ProtectedRoute><ChatbotPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.IMAGE_RECOGNITION} element={
+            <ProtectedRoute><ImageRecognitionPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.TEXT_CLASSIFICATION} element={
+            <ProtectedRoute><TextClassificationPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.DOCUMENTATION} element={
+            <ProtectedRoute><DocumentationPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.LINEAR_REGRESSION} element={
+            <ProtectedRoute><LinearRegressionPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.EXPERIMENTATION} element={
+            <ProtectedRoute><ExperimentationPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.DECISION_TREE} element={
+            <ProtectedRoute><DecisionTreePage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.KMEANS} element={
+            <ProtectedRoute><KMeansPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.NEURAL_NETWORK} element={
+            <ProtectedRoute><NeuralNetworkPage /></ProtectedRoute>
+          } />
         </Routes>
       </main>
 
       <Footer />
-
-      {/* Système de notifications */}
-      <NotificationContainer 
-        notifications={notifications}
-        onRemove={removeNotification}
-      />
-
-      {/* Onboarding */}
+      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
       <OnboardingModal isOpen={showOnboarding} onClose={handleCloseOnboarding} />
     </div>
   );
@@ -83,11 +113,13 @@ const AppContent = () => {
 const App = () => {
   return (
     <Router>
-      <AppProvider>
-        <UserProgressProvider>
-          <AppContent />
-        </UserProgressProvider>
-      </AppProvider>
+      <AuthProvider>
+        <AppProvider>
+          <UserProgressProvider>
+            <AppContent />
+          </UserProgressProvider>
+        </AppProvider>
+      </AuthProvider>
     </Router>
   );
 };
