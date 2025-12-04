@@ -7,7 +7,6 @@ import Button from "@components/common/Button";
 import Card from "@components/common/Card";
 import TextArea from "@components/common/TextArea";
 import Badge from "@components/common/Badge";
-
 import {
   Calendar,
   User,
@@ -18,7 +17,6 @@ import {
   Send,
   Tag
 } from "lucide-react";
-
 import { formatDate } from "@utils/dateFormatter";
 
 const BlogArticlePage = () => {
@@ -30,10 +28,8 @@ const BlogArticlePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
   const [newComment, setNewComment] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
-
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [likingInProgress, setLikingInProgress] = useState(false);
@@ -53,9 +49,7 @@ const BlogArticlePage = () => {
       setArticle(data);
       setLikesCount(data.likes || 0);
 
-      const likedArticles = JSON.parse(
-        localStorage.getItem("likedArticles") || "[]"
-      );
+      const likedArticles = JSON.parse(localStorage.getItem("likedArticles") || "[]");
       setIsLiked(likedArticles.includes(id));
     } catch (err) {
       setError("Article introuvable");
@@ -88,9 +82,7 @@ const BlogArticlePage = () => {
       setIsLiked(response.liked);
       setLikesCount((prev) => (response.liked ? prev + 1 : prev - 1));
 
-      const likedArticles = JSON.parse(
-        localStorage.getItem("likedArticles") || "[]"
-      );
+      const likedArticles = JSON.parse(localStorage.getItem("likedArticles") || "[]");
 
       if (response.liked) {
         likedArticles.push(id);
@@ -127,7 +119,6 @@ const BlogArticlePage = () => {
       setComments([...comments, comment]);
       setNewComment("");
       setSuccess("Commentaire ajouté avec succès !");
-
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(err.message || "Erreur lors de l'ajout du commentaire");
@@ -160,11 +151,7 @@ const BlogArticlePage = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4">
         {error && (
-          <Notification
-            type="error"
-            message={error}
-            onClose={() => setError(null)}
-          />
+          <Notification type="error" message={error} onClose={() => setError(null)} />
         )}
 
         {success && (
@@ -197,9 +184,7 @@ const BlogArticlePage = () => {
 
           <div className="p-8">
             <div className="flex flex-wrap gap-2 mb-4">
-              {article.category && (
-                <Badge variant="primary">{article.category}</Badge>
-              )}
+              {article.category && <Badge variant="primary">{article.category}</Badge>}
 
               {article.tags?.map((tag, index) => (
                 <Badge key={index} variant="outline">
@@ -239,7 +224,6 @@ const BlogArticlePage = () => {
             {article.links && article.links.length > 0 && (
               <div className="mb-8 p-4 bg-blue-50 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-3">Liens utiles :</h3>
-
                 <ul className="space-y-2">
                   {article.links.map((link, index) => (
                     <li key={index}>
@@ -260,13 +244,7 @@ const BlogArticlePage = () => {
             <div className="flex items-center gap-4 pt-6 border-t">
               <Button
                 variant={isLiked ? "primary" : "outline"}
-                icon={
-                  <Heart
-                    className={`w-5 h-5 ${
-                      isLiked ? "fill-current text-red-500" : ""
-                    }`}
-                  />
-                }
+                icon={<Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />}
                 onClick={handleLike}
                 disabled={likingInProgress || !isAuthenticated}
                 className="transition-all"
@@ -276,8 +254,7 @@ const BlogArticlePage = () => {
 
               <span className="flex items-center gap-2 text-gray-600">
                 <MessageCircle className="w-5 h-5" />
-                {comments.length} commentaire
-                {comments.length > 1 ? "s" : ""}
+                {comments.length} commentaire{comments.length > 1 ? "s" : ""}
               </span>
             </div>
           </div>
@@ -310,21 +287,15 @@ const BlogArticlePage = () => {
               </form>
             ) : (
               <div className="mb-8 p-4 bg-blue-50 rounded-lg text-center">
-                <p className="text-gray-700 mb-3">
-                  Connectez-vous pour laisser un commentaire
-                </p>
-
-                <Button onClick={() => navigate("/login")}>
-                  Se connecter
-                </Button>
+                <p className="text-gray-700 mb-3">Connectez-vous pour laisser un commentaire</p>
+                <Button onClick={() => navigate("/login")}>Se connecter</Button>
               </div>
             )}
 
             <div className="space-y-4">
               {comments.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">
-                  Aucun commentaire pour le moment. Soyez le premier à
-                  commenter !
+                  Aucun commentaire pour le moment. Soyez le premier à commenter !
                 </p>
               ) : (
                 comments.map((comment) => (
@@ -346,12 +317,9 @@ const CommentCard = ({ comment }) => (
         <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
           {comment.author_email?.[0]?.toUpperCase() || "U"}
         </div>
-
         <div>
           <p className="font-medium text-gray-900">{comment.author_email}</p>
-          <p className="text-sm text-gray-500">
-            {formatDate(comment.created_at)}
-          </p>
+          <p className="text-sm text-gray-500">{formatDate(comment.created_at)}</p>
         </div>
       </div>
     </div>

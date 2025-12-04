@@ -4,7 +4,6 @@ import {
   User, 
   Tag, 
   BookOpen, 
-  ChevronRight,
   Search,
   Filter,
   Clock,
@@ -12,9 +11,7 @@ import {
   Heart,
   Plus,
   TrendingUp,
-  ArrowRight,
-  Users,
-  GraduationCap
+  ArrowRight
 } from 'lucide-react';
 import { blogService } from '@services/api/blogService';
 import Button from '@components/common/Button';
@@ -53,49 +50,42 @@ const BlogPage = () => {
     filterAndPaginateArticles();
   }, [articles, selectedCategory, selectedTag, searchQuery, sortBy, currentPage]);
 
-const fetchInitialData = async () => {
-  try {
-    setLoading(true);
-    const [articlesData, categoriesData, tagsData] = await Promise.all([
-      blogService.getArticles(),
-      blogService.getCategories(),
-      blogService.getTags()
-    ]);
+  const fetchInitialData = async () => {
+    try {
+      setLoading(true);
+      const [articlesData, categoriesData, tagsData] = await Promise.all([
+        blogService.getArticles(),
+        blogService.getCategories(),
+        blogService.getTags()
+      ]);
 
-    // ✅ Gérer le format de retour de getArticles
-    const articles = articlesData?.articles || [];
-    setArticles(articles);
-    
-    // ✅ S'assurer que ce sont des tableaux (double sécurité)
-    setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-    setTags(Array.isArray(tagsData) ? tagsData : []);
-    
-    setTotalPages(Math.ceil((articlesData?.total || articles.length) / articlesPerPage));
-  } catch (err) {
-    console.error('fetchInitialData error:', err);
-    setError(err.message || 'Erreur lors du chargement des données');
-    // ✅ Garantir que les états restent cohérents
-    setArticles([]);
-    setCategories([]);
-    setTags([]);
-  } finally {
-    setLoading(false);
-  }
-};
+      const articles = articlesData?.articles || [];
+      setArticles(articles);
+      setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+      setTags(Array.isArray(tagsData) ? tagsData : []);
+      setTotalPages(Math.ceil((articlesData?.total || articles.length) / articlesPerPage));
+    } catch (err) {
+      console.error('fetchInitialData error:', err);
+      setError(err.message || 'Erreur lors du chargement des données');
+      setArticles([]);
+      setCategories([]);
+      setTags([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filterAndPaginateArticles = () => {
     let filtered = [...articles];
 
+    // ✅ Filtrage corrigé - category est une string
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(article =>
-        article.category?.id === selectedCategory
-      );
+      filtered = filtered.filter(article => article.category === selectedCategory);
     }
 
+    // ✅ Filtrage corrigé - tags est un array de strings
     if (selectedTag !== 'all') {
-      filtered = filtered.filter(article =>
-        article.tags?.some(tag => tag.id === selectedTag)
-      );
+      filtered = filtered.filter(article => article.tags?.includes(selectedTag));
     }
 
     if (searchQuery) {
@@ -103,7 +93,7 @@ const fetchInitialData = async () => {
       filtered = filtered.filter(article =>
         article.title.toLowerCase().includes(query) ||
         article.content.toLowerCase().includes(query) ||
-        article.author?.name.toLowerCase().includes(query)
+        article.author_email?.toLowerCase().includes(query)
       );
     }
 
@@ -115,7 +105,7 @@ const fetchInitialData = async () => {
         filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
         break;
       case 'most_liked':
-        filtered.sort((a, b) => (b.likes_count || 0) - (a.likes_count || 0));
+        filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
         break;
       default:
         break;
@@ -221,21 +211,20 @@ const fetchInitialData = async () => {
                 </h2>
 
                 <p className="text-gray-600 mb-6">
-                  {featuredArticle.excerpt ||
-                    featuredArticle.content.substring(0, 200)}...
+                  {featuredArticle.excerpt || featuredArticle.content.substring(0, 200)}...
                 </p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <User className="w-4 h-4" />
-                    <span>{featuredArticle.author?.name}</span>
+                    <span>{featuredArticle.author_email}</span>
 
                     {featuredArticle.category && (
-                      <Badge variant="outline">{featuredArticle.category.name}</Badge>
+                      <Badge variant="outline">{featuredArticle.category}</Badge>
                     )}
                   </div>
 
-                  <Link to={`/blog/article/${featuredArticle.id}`}>
+                  <Link to={`/blog/${featuredArticle.id}`}>
                     <Button variant="primary" icon={<ArrowRight />}>
                       Lire l'article
                     </Button>
@@ -249,6 +238,7 @@ const fetchInitialData = async () => {
                   <img
                     src={featuredArticle.image_url}
                     className="w-full h-full object-cover"
+                    alt={featuredArticle.title}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
@@ -261,7 +251,7 @@ const fetchInitialData = async () => {
                     <Eye className="w-4 h-4" /> {featuredArticle.views || 0} vues
                   </span>
                   <span className="flex items-center gap-1">
-                    <Heart className="w-4 h-4" /> {featuredArticle.likes_count || 0} likes
+                    <Heart className="w-4 h-4" /> {featuredArticle.likes || 0} likes
                   </span>
                 </div>
               </div>
@@ -271,7 +261,6 @@ const fetchInitialData = async () => {
 
         {/* FILTRES */}
         <div className="mb-8 flex flex-col md:flex-row justify-between gap-4">
-
           <div className="flex flex-wrap items-center gap-4">
             <Filter className="w-5 h-5 text-gray-500" />
             <span className="text-sm">Filtrer par :</span>
@@ -281,7 +270,7 @@ const fetchInitialData = async () => {
               onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
               options={[
                 { value: 'all', label: 'Toutes catégories' },
-                ...categories.map(c => ({ value: c.id, label: c.name }))
+                ...categories.map(c => ({ value: c, label: c }))
               ]}
             />
 
@@ -290,7 +279,7 @@ const fetchInitialData = async () => {
               onChange={(e) => { setSelectedTag(e.target.value); setCurrentPage(1); }}
               options={[
                 { value: 'all', label: 'Tous les tags' },
-                ...tags.map(t => ({ value: t.id, label: t.name }))
+                ...tags.map(t => ({ value: t, label: t }))
               ]}
             />
 
@@ -341,9 +330,7 @@ const fetchInitialData = async () => {
             </div>
           </>
         )}
-
       </div>
-
     </div>
   );
 };
@@ -369,7 +356,7 @@ const ArticleCard = ({ article }) => (
 
       {article.category && (
         <div className="absolute top-3 left-3">
-          <Badge variant="primary">{article.category.name}</Badge>
+          <Badge variant="primary">{article.category}</Badge>
         </div>
       )}
     </div>
@@ -397,9 +384,9 @@ const ArticleCard = ({ article }) => (
           <Eye className="w-4 h-4" /> {article.views || 0}
         </span>
         <span className="flex items-center gap-1 text-gray-600 text-sm">
-          <Heart className="w-4 h-4" /> {article.likes_count || 0}
+          <Heart className="w-4 h-4" /> {article.likes || 0}
         </span>
-        <Link to={`/blog/article/${article.id}`}>
+        <Link to={`/blog/${article.id}`}>
           <Button variant="link" className="text-blue-600">Lire</Button>
         </Link>
       </div>

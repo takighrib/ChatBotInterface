@@ -1,105 +1,153 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ← Ajouter
+import { useNavigate } from "react-router-dom";
 import { blogService } from "@services/api/blogService";
-import { useAuth } from "@context/AuthContext"; // ← Ajouter
 import Button from "@components/common/Button";
 import Input from "@components/common/Input";
 import TextArea from "@components/common/TextArea";
 import Notification from "@components/common/Notification";
+import { ArrowLeft, Loader } from "lucide-react";
 
 const BlogCreatePage = () => {
-  const { user } = useAuth(); // ← Récupérer l'utilisateur
-  const navigate = useNavigate(); // ← Pour redirection
-  
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState("general");
+  const [tags, setTags] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState(null);
-  const [loading, setLoading] = useState(false); // ← Ajouter état loading
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    // ✅ Récupérer le token depuis localStorage
-    const token = localStorage.getItem('token');
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
     if (!token) {
-      setMessage({ type: "error", text: "Vous devez être connecté pour créer un article" });
+      setMessage({
+        type: "error",
+        text: "Vous devez être connecté pour créer un article",
+      });
+      return;
+    }
+
+    if (!title.trim() || !content.trim()) {
+      setMessage({
+        type: "error",
+        text: "Le titre et le contenu sont requis",
+      });
       return;
     }
 
     try {
       setLoading(true);
-      
-      // ✅ PASSER LE TOKEN en second paramètre
-      await blogService.createArticle({
-        title,
-        content,
-        image_url: imageUrl,
-        tags: [], // ← Ajouter si nécessaire
-        category: "general" // ← Ajouter si nécessaire
-      }, token);
+
+      const articleData = {
+        title: title.trim(),
+        content: content.trim(),
+        category: category.trim(),
+        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+        image_url: imageUrl.trim(),
+        links: [],
+      };
+
+      await blogService.createArticle(articleData, token);
 
       setMessage({ type: "success", text: "Article créé avec succès !" });
-      
-      // Réinitialiser le formulaire
-      setTitle("");
-      setContent("");
-      setImageUrl("");
-      
-      // ✅ Rediriger vers la page blog après 2 secondes
+
       setTimeout(() => {
-        navigate('/blog');
-      }, 2000);
-      
+        navigate("/blog");
+      }, 1500);
     } catch (err) {
-      setMessage({ type: "error", text: err.message || "Erreur lors de la création" });
+      setMessage({
+        type: "error",
+        text: err.message || "Erreur lors de la création",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6">Créer un article</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-3xl mx-auto py-10 px-4">
+        <Button
+          variant="outline"
+          icon={<ArrowLeft />}
+          onClick={() => navigate("/blog")}
+          className="mb-6"
+        >
+          Retour
+        </Button>
 
-      {message && (
-        <Notification
-          type={message.type}
-          message={message.text}
-          onClose={() => setMessage(null)}
-        />
-      )}
+        <h1 className="text-3xl font-bold mb-6">Créer un article</h1>
 
-      <Input
-        label="Titre"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="mb-4"
-        required
-      />
+        {message && (
+          <Notification
+            type={message.type}
+            message={message.text}
+            onClose={() => setMessage(null)}
+          />
+        )}
 
-      <Input
-        label="Image URL (optionnel)"
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
-        className="mb-4"
-        placeholder="https://example.com/image.jpg"
-      />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Titre"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Titre de votre article"
+            required
+          />
 
-      <TextArea
-        label="Contenu"
-        value={content}
-        rows={12}
-        onChange={(e) => setContent(e.target.value)}
-        className="mb-6"
-        required
-      />
+          <Input
+            label="Catégorie"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="Ex: IA, Programmation, Data Science"
+          />
 
-      <Button 
-        onClick={handleSubmit}
-        disabled={loading || !title || !content}
-      >
-        {loading ? "Publication..." : "Publier l'article"}
-      </Button>
+          <Input
+            label="Tags (séparés par des virgules)"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="Ex: Machine Learning, Python, Tutorial"
+          />
+
+          <Input
+            label="Image URL (optionnel)"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="https://example.com/image.jpg"
+          />
+
+          <TextArea
+            label="Contenu"
+            value={content}
+            rows={15}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Rédigez le contenu de votre article..."
+            required
+          />
+
+          <div className="flex gap-3">
+            <Button
+              type="submit"
+              disabled={loading || !title.trim() || !content.trim()}
+              icon={loading ? <Loader className="animate-spin" /> : null}
+            >
+              {loading ? "Publication..." : "Publier l'article"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/blog")}
+            >
+              Annuler
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
