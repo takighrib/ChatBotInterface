@@ -4,12 +4,16 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    @apply bg-brand-paper text-text-primary;
+    font-family: 'Poppins', 'Inter', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,28,28,0.05) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(28,28,28,0.02), rgba(28,28,28,0.02));
+    background-size: 24px 24px, 100% 100%;
+    background-attachment: fixed;
   }
 
   code {
@@ -20,23 +24,38 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition duration-200;
+    @apply bg-brand-accent text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md transition duration-200;
   }
 
   .btn-secondary {
-    @apply bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold border-2 border-purple-600 hover:bg-purple-50 transition duration-200;
+    @apply bg-white text-brand-slate px-6 py-3 rounded-lg font-semibold border border-brand-slate/40 hover:bg-brand-mint/20 transition duration-200;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition duration-300;
+    @apply bg-white rounded-xl shadow-card p-6 border-l-4 border-brand-mint hover:shadow-lg transition duration-300;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition duration-200;
+    @apply w-full px-4 py-3 border border-brand-grey rounded-lg focus:outline-none focus:border-brand-slate transition duration-200 bg-white;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+    @apply text-brand-slate;
+  }
+
+  .code-block {
+    @apply relative bg-white rounded-lg border border-brand-grey/60 shadow-sm p-4 font-mono text-sm text-text-primary; 
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(187, 213, 208, 0.18) 0px,
+      rgba(187, 213, 208, 0.18) 28px,
+      transparent 28px,
+      transparent 56px
+    );
+  }
+
+  .copy-button {
+    @apply absolute top-2 right-2 px-2 py-1 text-xs rounded-md border border-brand-slate/30 text-brand-slate bg-white hover:bg-brand-mint/30 transition;
   }
 }
 
@@ -76,14 +95,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #F2F2EF;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #3b82f6, #9333ea);
+  background: linear-gradient(180deg, rgba(47,79,79,0.7), rgba(47,79,79,0.5));
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #2563eb, #7e22ce);
+  background: linear-gradient(180deg, rgba(47,79,79,0.8), rgba(47,79,79,0.6));
 }

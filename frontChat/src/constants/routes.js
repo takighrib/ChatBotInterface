@@ -1,3 +1,6 @@
+// ==============================
+// ROUTES : chemins de navigation
+// ==============================
 export const ROUTES = {
   HOME: '/',
   CHATBOT: '/chatbot',
@@ -5,9 +8,19 @@ export const ROUTES = {
   TEXT_CLASSIFICATION: '/text-classification',
   DOCUMENTATION: '/documentation',
   EXPERIMENTATION: '/experimentation',
-  ABOUT: '/about'
+  ABOUT: '/about',
+
+  // === Routes IA avancées ===
+  DecisionTreePage: '/decision-tree',
+  KMeansPage: '/kmeans',
+  LinearRegressionPage: '/linear-regression',
+  NeuralNetworkPage: '/neural-network'
 };
 
+
+// ======================================
+// NAV_ITEMS : éléments visibles dans le menu
+// ======================================
 export const NAV_ITEMS = [
   {
     name: 'Accueil',
@@ -38,5 +51,27 @@ export const NAV_ITEMS = [
     name: 'Mes Projets',
     path: ROUTES.EXPERIMENTATION,
     icon: 'Lightbulb'
+  },
+
+  // === Modules IA interactifs ===
+  {
+    name: 'Decision Tree',
+    path: ROUTES.DecisionTreePage,
+    icon: 'GitBranch'
+  },
+  {
+    name: 'K-Means',
+    path: ROUTES.KMeansPage,
+    icon: 'ScatterPlot'
+  },
+  {
+    name: 'Linear Regression',
+    path: ROUTES.LinearRegressionPage,
+    icon: 'TrendingUp'
+  },
+  {
+    name: 'Neural Network',
+    path: ROUTES.NeuralNetworkPage,
+    icon: 'Network'
   }
 ];

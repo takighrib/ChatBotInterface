@@ -48,26 +48,26 @@ const Modal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-y-auto animate-slide-up`}
+        className={`bg-white rounded-2xl shadow-card border border-brand-grey w-full ${sizes[size]} max-h-[90vh] overflow-y-auto animate-slide-up`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-brand-grey">
           {title && (
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-text-primary">
               {title}
             </h2>
           )}
           {showCloseButton && (
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
+              className="p-2 hover:bg-brand-mint/30 rounded-lg transition"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-brand-slate" />
             </button>
           )}
         </div>
@@ -95,7 +95,7 @@ export const ConfirmModal = ({
   variant = 'primary'
 }) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-blue-600 to-purple-600',
+    primary: 'bg-brand-accent',
     danger: 'bg-red-600'
   };
 

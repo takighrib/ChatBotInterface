@@ -19,7 +19,7 @@ const Input = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-text-secondary mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -27,7 +27,7 @@ const Input = ({
       
       <div className="relative">
         {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">
             {icon}
           </div>
         )}
@@ -40,11 +40,11 @@ const Input = ({
           disabled={disabled}
           required={required}
           className={`
-            w-full px-4 py-3 border-2 rounded-lg transition duration-200
-            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
+            w-full px-4 py-3 border rounded-lg transition duration-200
+            focus:outline-none focus:ring-2 focus:ring-brand-slate focus:border-transparent
             ${icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500' : 'border-gray-300'}
-            ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}
+            ${error ? 'border-red-500' : 'border-brand-grey'}
+            ${disabled ? 'bg-brand-paper cursor-not-allowed' : 'bg-white'}
           `}
           {...props}
         />
@@ -78,7 +78,7 @@ export const TextArea = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-text-secondary mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -93,11 +93,11 @@ export const TextArea = ({
         disabled={disabled}
         required={required}
         className={`
-          w-full px-4 py-3 border-2 rounded-lg transition duration-200
-          focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
+          w-full px-4 py-3 border rounded-lg transition duration-200
+          focus:outline-none focus:ring-2 focus:ring-brand-slate focus:border-transparent
           resize-none
-          ${error ? 'border-red-500' : 'border-gray-300'}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}
+          ${error ? 'border-red-500' : 'border-brand-grey'}
+          ${disabled ? 'bg-brand-paper cursor-not-allowed' : 'bg-white'}
         `}
         {...props}
       />

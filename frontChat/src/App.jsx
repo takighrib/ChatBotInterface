@@ -8,6 +8,7 @@ import { ROUTES } from '@constants/routes';
 import Header from '@components/common/Header';
 import Footer from '@components/common/Footer';
 import { NotificationContainer } from '@components/common/Notification';
+import OnboardingModal from '@components/onboarding/OnboardingModal';
 
 // Pages
 import HomePage from '@pages/HomePage';
@@ -20,6 +21,7 @@ import AboutPage from '@pages/AboutPage';
 import DecisionTreePage from '@pages/DecisionTreePage';
 import KMeansPage from '@pages/KMeansPage';
 import LinearRegressionPage from '@pages/LinearRegressionPage';
+import NeuralNetworkPage from '@pages/NeuralNetworkPage';
 
 
 
@@ -27,13 +29,25 @@ import LinearRegressionPage from '@pages/LinearRegressionPage';
 import { useApp } from '@context/AppContext';
 
 const AppContent = () => {
-  const { notifications, removeNotification } = useApp();
+  const { notifications, removeNotification, user, updateUserSettings } = useApp();
+  const [showOnboarding, setShowOnboarding] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!user || !user.onboarded) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
+
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    updateUserSettings && updateUserSettings({ onboarded: true });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-grow">
+      <main className="flex-grow pt-16">
         <Routes>
           <Route path={ROUTES.HOME} element={<HomePage />} />
           <Route path={ROUTES.CHATBOT} element={<ChatbotPage />} />
@@ -45,6 +59,7 @@ const AppContent = () => {
           <Route path={ROUTES.EXPERIMENTATION} element={<ExperimentationPage />} />
           <Route path={ROUTES.DecisionTreePage} element={<DecisionTreePage />} />
           <Route path={ROUTES.KMeansPage} element={<KMeansPage />} />
+          <Route path={ROUTES.NeuralNetworkPage} element={<NeuralNetworkPage />} />
 
 
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
@@ -58,6 +73,9 @@ const AppContent = () => {
         notifications={notifications}
         onRemove={removeNotification}
       />
+
+      {/* Onboarding */}
+      <OnboardingModal isOpen={showOnboarding} onClose={handleCloseOnboarding} />
     </div>
   );
 };

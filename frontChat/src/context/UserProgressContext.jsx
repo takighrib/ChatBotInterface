@@ -17,15 +17,44 @@ export const UserProgressProvider = ({ children }) => {
     imageRecognitionCompleted: 0,
     textClassificationCompleted: 0,
     totalExperiments: 0,
-    achievements: []
+    achievements: [],
+    streak: 1
   });
 
   useEffect(() => {
     // Charger la progression depuis le localStorage
     const savedProgress = localStorage.getItem(STORAGE_KEYS.USER_PROGRESS);
     if (savedProgress) {
-      setProgress(JSON.parse(savedProgress));
+      try {
+        const parsed = JSON.parse(savedProgress);
+        setProgress((prev) => ({ ...prev, ...parsed }));
+      } catch {}
     }
+    // Gestion simple du streak quotidien
+    try {
+      const today = new Date();
+      const key = `${STORAGE_KEYS.USER_PROGRESS}:last_visit`;
+      const last = localStorage.getItem(key);
+      let newStreak = 1;
+      if (last) {
+        const lastDate = new Date(last);
+        const startOf = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const diffDays = Math.floor((startOf(today) - startOf(lastDate)) / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) {
+          newStreak = progress.streak || 1; // unchanged
+        } else if (diffDays === 1) {
+          newStreak = (progress.streak || 1) + 1;
+        } else if (diffDays > 1) {
+          newStreak = 1;
+        }
+      }
+      localStorage.setItem(key, today.toISOString());
+      setProgress((prev) => {
+        const updated = { ...prev, streak: newStreak };
+        localStorage.setItem(STORAGE_KEYS.USER_PROGRESS, JSON.stringify(updated));
+        return updated;
+      });
+    } catch {}
   }, []);
 
   const updateProgress = (module, value) => {

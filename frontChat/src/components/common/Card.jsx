@@ -22,8 +22,8 @@ const Card = ({
   return (
     <div
       className={`
-        bg-white rounded-xl shadow-lg p-6 transition duration-300
-        ${hover ? 'hover:shadow-2xl hover:scale-105 cursor-pointer' : ''}
+        card
+        ${hover ? 'cursor-pointer' : ''}
         ${className}
       `}
       onClick={onClick}
@@ -35,13 +35,13 @@ const Card = ({
       )}
       
       {title && (
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <h3 className="text-xl font-bold text-text-primary mb-2">
           {title}
         </h3>
       )}
       
       {description && (
-        <p className="text-gray-600 mb-4">
+        <p className="text-text-secondary mb-4">
           {description}
         </p>
       )}
@@ -59,11 +59,11 @@ export const GradientCard = ({
   description,
   icon,
   children,
-  gradient = 'from-blue-500 to-purple-600',
+  gradient = 'from-brand-mint to-brand-surface',
   className = ''
 }) => {
   return (
-    <div className={`bg-gradient-to-r ${gradient} rounded-xl shadow-lg p-6 text-white ${className}`}>
+    <div className={`bg-gradient-to-r ${gradient} rounded-xl shadow-card p-6 text-text-primary ${className}`}>
       {icon && (
         <div className="mb-4">
           {icon}
@@ -77,7 +77,7 @@ export const GradientCard = ({
       )}
       
       {description && (
-        <p className="text-white/90 mb-4">
+        <p className="text-text-secondary mb-4">
           {description}
         </p>
       )}
@@ -101,26 +101,26 @@ export const InteractiveCard = ({
   return (
     <div className={`card ${className}`}>
       {icon && (
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 w-16 h-16 rounded-lg flex items-center justify-center text-white mb-4">
+        <div className="bg-brand-mint w-16 h-16 rounded-lg flex items-center justify-center text-brand-slate mb-4 shadow-sm">
           {icon}
         </div>
       )}
       
       {title && (
-        <h4 className="text-xl font-bold text-gray-900 mb-3">
+        <h4 className="text-xl font-bold text-text-primary mb-3">
           {title}
         </h4>
       )}
       
       {description && (
-        <p className="text-gray-600 mb-4">
+        <p className="text-text-secondary mb-4">
           {description}
         </p>
       )}
       
       <button
         onClick={onButtonClick}
-        className="text-purple-600 font-semibold hover:text-purple-700 flex items-center transition"
+        className="text-brand-accent font-semibold hover:opacity-90 flex items-center transition"
       >
         {buttonText} →
       </button>
