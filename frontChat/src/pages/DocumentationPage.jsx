@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { BookOpen, Brain, Network, MessageCircle, Eye, FolderTree, ChevronRight } from 'lucide-react';
+import { BookOpen, Brain, Network, MessageCircle, Eye, FolderTree, ChevronRight, Sparkles } from 'lucide-react';
 import { AI_CONCEPTS } from '@constants/aiConcepts';
 import Card from '@components/common/Card';
+import Badge from '@components/common/Badge';
 import Modal from '@components/common/Modal';
 
 const DocumentationPage = () => {
@@ -18,62 +19,66 @@ const DocumentationPage = () => {
   const getLevelColor = (level) => {
     switch (level) {
       case 'débutant':
-        return 'bg-green-100 text-green-800';
+        return 'success';
       case 'intermédiaire':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'accent';
       case 'avancé':
-        return 'bg-red-100 text-red-800';
+        return 'danger';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'mint';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-brand-paper py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-12 animate-fade-in">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl">
-              <BookOpen className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center mb-6">
+            <div className="bg-brand-mint/30 p-4 rounded-full">
+              <BookOpen className="w-16 h-16 text-brand-accent" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Documentation IA
-            </h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Apprends les concepts fondamentaux de l'intelligence artificielle à travers des explications simples et illustrées
+          <Badge variant="mint" size="lg" className="mb-4">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Documentation IA
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary mb-4">
+            Apprends les Concepts IA
+          </h1>
+          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
+            Découvre les concepts fondamentaux de l'intelligence artificielle à travers des explications simples et illustrées
           </p>
         </div>
 
         {/* Section Introduction */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8 animate-slide-up">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <Card className="mb-8 border-l-4 border-brand-mint animate-slide-up">
+          <h2 className="text-2xl font-bold text-text-primary mb-4">
             🚀 Qu'est-ce que l'Intelligence Artificielle ?
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-text-secondary mb-4">
             L'Intelligence Artificielle (IA) est la capacité d'une machine à imiter l'intelligence humaine. 
             Elle permet aux ordinateurs d'apprendre, de raisonner, de résoudre des problèmes et de prendre des décisions.
           </p>
           <div className="grid md:grid-cols-3 gap-4 mt-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">Apprentissage</h3>
-              <p className="text-sm text-blue-800">L'IA peut apprendre à partir de données et d'expériences</p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-purple-900 mb-2">Adaptation</h3>
-              <p className="text-sm text-purple-800">Elle s'améliore avec le temps et s'adapte à de nouvelles situations</p>
-            </div>
-            <div className="bg-pink-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-pink-900 mb-2">Autonomie</h3>
-              <p className="text-sm text-pink-800">Elle peut prendre des décisions sans intervention humaine constante</p>
-            </div>
+            <Card className="bg-brand-mint/20 border-l-4 border-brand-mint">
+              <h3 className="font-semibold text-text-primary mb-2">Apprentissage</h3>
+              <p className="text-sm text-text-secondary">L'IA peut apprendre à partir de données et d'expériences</p>
+            </Card>
+            <Card className="bg-brand-accent/10 border-l-4 border-brand-accent">
+              <h3 className="font-semibold text-text-primary mb-2">Adaptation</h3>
+              <p className="text-sm text-text-secondary">Elle s'améliore avec le temps et s'adapte à de nouvelles situations</p>
+            </Card>
+            <Card className="bg-brand-mint/20 border-l-4 border-brand-mint">
+              <h3 className="font-semibold text-text-primary mb-2">Autonomie</h3>
+              <p className="text-sm text-text-secondary">Elle peut prendre des décisions sans intervention humaine constante</p>
+            </Card>
           </div>
-        </div>
+        </Card>
 
         {/* Concepts IA */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 animate-fade-in">
+          <h2 className="text-3xl font-bold text-text-primary mb-6 animate-fade-in">
             📚 Concepts Clés
           </h2>
           
@@ -82,75 +87,71 @@ const DocumentationPage = () => {
               const IconComponent = iconMap[concept.icon];
               
               return (
-                <div
+                <Card
                   key={concept.id}
-                  className="animate-slide-up"
+                  className="h-full cursor-pointer hover:shadow-xl transition-all duration-300 border-l-4 border-brand-mint animate-slide-up"
                   style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <Card
-                    className="h-full cursor-pointer hover:shadow-2xl transition-all duration-300"
                     onClick={() => setSelectedConcept(concept)}
                   >
                     <div className="flex items-start justify-between mb-4">
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-3 rounded-lg">
-                        {IconComponent && <IconComponent className="w-6 h-6 text-white" />}
+                    <div className="bg-brand-mint p-3 rounded-lg">
+                      {IconComponent && <IconComponent className="w-6 h-6 text-brand-slate" />}
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLevelColor(concept.level)}`}>
+                    <Badge variant={getLevelColor(concept.level)} size="sm">
                         {concept.level}
-                      </span>
+                    </Badge>
                     </div>
                     
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-xl font-bold text-text-primary mb-2">
                       {concept.title}
                     </h3>
                     
-                    <p className="text-gray-600 mb-4 text-sm">
+                  <p className="text-text-secondary mb-4 text-sm">
                       {concept.description}
                     </p>
                     
-                    <div className="flex items-center text-purple-600 font-semibold text-sm">
+                  <div className="flex items-center text-brand-accent font-semibold text-sm">
                       En savoir plus
                       <ChevronRight className="w-4 h-4 ml-1" />
                     </div>
                   </Card>
-                </div>
               );
             })}
           </div>
         </div>
 
         {/* Ressources supplémentaires */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-8 text-white animate-fade-in">
-          <h2 className="text-2xl font-bold mb-4">
+        <Card className="bg-gradient-to-r from-brand-mint to-brand-surface border-l-4 border-brand-accent animate-fade-in">
+          <h2 className="text-2xl font-bold text-text-primary mb-4">
             🎓 Ressources d'apprentissage
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h3 className="font-semibold mb-2">Tutoriels interactifs</h3>
-              <p className="text-sm opacity-90">
+            <Card className="bg-white/60 backdrop-blur-sm border-l-4 border-brand-mint">
+              <h3 className="font-semibold text-text-primary mb-2">Tutoriels interactifs</h3>
+              <p className="text-sm text-text-secondary">
                 Des guides pas à pas pour chaque module avec des exemples concrets
               </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h3 className="font-semibold mb-2">Vidéos explicatives</h3>
-              <p className="text-sm opacity-90">
+            </Card>
+            <Card className="bg-white/60 backdrop-blur-sm border-l-4 border-brand-accent">
+              <h3 className="font-semibold text-text-primary mb-2">Vidéos explicatives</h3>
+              <p className="text-sm text-text-secondary">
                 Des vidéos courtes qui expliquent les concepts complexes simplement
               </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h3 className="font-semibold mb-2">Exercices pratiques</h3>
-              <p className="text-sm opacity-90">
+            </Card>
+            <Card className="bg-white/60 backdrop-blur-sm border-l-4 border-brand-mint">
+              <h3 className="font-semibold text-text-primary mb-2">Exercices pratiques</h3>
+              <p className="text-sm text-text-secondary">
                 Mets en pratique ce que tu as appris avec nos modules interactifs
               </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h3 className="font-semibold mb-2">Quiz et évaluations</h3>
-              <p className="text-sm opacity-90">
+            </Card>
+            <Card className="bg-white/60 backdrop-blur-sm border-l-4 border-brand-accent">
+              <h3 className="font-semibold text-text-primary mb-2">Quiz et évaluations</h3>
+              <p className="text-sm text-text-secondary">
                 Teste tes connaissances et suis ta progression (bientôt disponible)
               </p>
-            </div>
+            </Card>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Modal de détail du concept */}
@@ -163,52 +164,29 @@ const DocumentationPage = () => {
         >
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLevelColor(selectedConcept.level)}`}>
+              <Badge variant={getLevelColor(selectedConcept.level)} size="sm">
                 Niveau: {selectedConcept.level}
-              </span>
+              </Badge>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-text-primary mb-2">
                 Description
               </h3>
-              <p className="text-gray-600">
+              <p className="text-text-secondary">
                 {selectedConcept.content}
               </p>
             </div>
 
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-900 mb-2">
+            <Card className="bg-brand-mint/20 border-l-4 border-brand-accent">
+              <h4 className="font-semibold text-text-primary mb-2">
                 💡 En pratique
               </h4>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-text-secondary">
                 Tu peux voir ce concept en action dans nos modules interactifs. 
                 Essaie-les pour mieux comprendre !
               </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                🔗 Liens utiles
-              </h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="text-purple-600 hover:text-purple-700 text-sm">
-                    → Tutoriel vidéo sur {selectedConcept.title}
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-purple-600 hover:text-purple-700 text-sm">
-                    → Exercices pratiques
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-purple-600 hover:text-purple-700 text-sm">
-                    → Ressources externes recommandées
-                  </a>
-                </li>
-              </ul>
-            </div>
+            </Card>
           </div>
         </Modal>
       )}

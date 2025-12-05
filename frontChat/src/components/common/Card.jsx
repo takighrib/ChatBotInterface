@@ -17,7 +17,9 @@ const Card = ({
   children,
   onClick,
   className = '',
-  hover = true
+  hover = true,
+  style,
+  ...props
 }) => {
   return (
     <div
@@ -27,6 +29,8 @@ const Card = ({
         ${className}
       `}
       onClick={onClick}
+      style={style}
+      {...props}
     >
       {icon && (
         <div className="mb-4">
@@ -99,7 +103,7 @@ export const InteractiveCard = ({
   className = ''
 }) => {
   return (
-    <div className={`card ${className}`}>
+    <div className={`card cursor-pointer ${className}`}>
       {icon && (
         <div className="bg-brand-mint w-16 h-16 rounded-lg flex items-center justify-center text-brand-slate mb-4 shadow-sm">
           {icon}
@@ -120,9 +124,10 @@ export const InteractiveCard = ({
       
       <button
         onClick={onButtonClick}
-        className="text-brand-accent font-semibold hover:opacity-90 flex items-center transition"
+        className="text-brand-accent font-semibold hover:text-brand-accent/80 flex items-center gap-2 transition duration-200 group"
       >
-        {buttonText} →
+        <span>{buttonText}</span>
+        <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
       </button>
     </div>
   );

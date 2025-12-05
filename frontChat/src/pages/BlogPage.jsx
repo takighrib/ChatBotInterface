@@ -156,15 +156,15 @@ const BlogPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-brand-paper">
       {/* HEADER */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <div className="bg-gradient-to-r from-brand-mint to-brand-surface border-b-4 border-brand-accent">
         <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-          <div className="inline-flex p-3 bg-white/10 rounded-full mb-6">
-            <BookOpen className="w-8 h-8" />
+          <div className="inline-flex p-3 bg-brand-accent/20 rounded-full mb-6">
+            <BookOpen className="w-8 h-8 text-brand-accent" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog Éducatif</h1>
-          <p className="text-blue-100 text-xl max-w-2xl mx-auto mb-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary mb-4">Blog Éducatif</h1>
+          <p className="text-text-secondary text-xl max-w-2xl mx-auto mb-8">
             Ressources, conseils et actualités pour les étudiants et professeurs
           </p>
 
@@ -191,26 +191,26 @@ const BlogPage = () => {
 
         {/* ARTICLE VEDETTE */}
         {featuredArticle && (
-          <Card className="overflow-hidden mb-12">
+          <Card className="overflow-hidden mb-12 border-l-4 border-brand-accent">
             <div className="md:flex">
               <div className="md:w-2/3 p-8">
                 
                 <div className="flex items-center gap-4 mb-4">
-                  <Badge variant="primary" className="flex items-center gap-1">
+                  <Badge variant="accent" className="flex items-center gap-1">
                     <TrendingUp className="w-4 h-4" />
                     À la une
                   </Badge>
-                  <span className="text-sm text-gray-600 flex items-center gap-1">
+                  <span className="text-sm text-text-secondary flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
                     {formatDate(featuredArticle.created_at)}
                   </span>
                 </div>
 
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl font-bold text-text-primary mb-4">
                   {featuredArticle.title}
                 </h2>
 
-                <p className="text-gray-600 mb-6">
+                <p className="text-text-secondary mb-6">
                   {featuredArticle.excerpt || featuredArticle.content.substring(0, 200)}...
                 </p>
 
@@ -241,12 +241,12 @@ const BlogPage = () => {
                     alt={featuredArticle.title}
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                    <BookOpen className="w-20 h-20 text-blue-300" />
+                  <div className="w-full h-full bg-gradient-to-br from-brand-mint to-brand-surface flex items-center justify-center">
+                    <BookOpen className="w-20 h-20 text-brand-accent" />
                   </div>
                 )}
 
-                <div className="absolute bottom-0 p-4 w-full bg-black/40 text-white flex justify-between">
+                <div className="absolute bottom-0 p-4 w-full bg-brand-slate/80 text-white flex justify-between">
                   <span className="flex items-center gap-1">
                     <Eye className="w-4 h-4" /> {featuredArticle.views || 0} vues
                   </span>
@@ -308,16 +308,16 @@ const BlogPage = () => {
             <LoadingSpinner />
           </div>
         ) : filteredArticles.length === 0 ? (
-          <Card className="text-center py-16">
-            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold">Aucun article trouvé</h3>
+          <Card className="text-center py-16 border-l-4 border-brand-mint">
+            <BookOpen className="w-16 h-16 text-brand-grey mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-text-primary">Aucun article trouvé</h3>
             <Button onClick={handleResetFilters} className="mt-6">Voir tous les articles</Button>
           </Card>
         ) : (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+              {filteredArticles.map((article, index) => (
+                <ArticleCard key={article.id} article={article} index={index} />
               ))}
             </div>
 
@@ -339,8 +339,8 @@ const BlogPage = () => {
 /* ARTICLE CARD */
 /* --------------------------------------------------------- */
 
-const ArticleCard = ({ article }) => (
-  <Card className="group hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+const ArticleCard = ({ article, index = 0 }) => (
+  <Card className="group hover:shadow-xl transition-all duration-300 h-full flex flex-col border-l-4 border-brand-mint animate-slide-up" style={{ animationDelay: `${index * 50}ms` }}>
     <div className="relative h-48 overflow-hidden rounded-t-lg">
       {article.image_url ? (
         <img
@@ -349,45 +349,45 @@ const ArticleCard = ({ article }) => (
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-          <BookOpen className="w-12 h-12 text-blue-300" />
+        <div className="w-full h-full bg-gradient-to-br from-brand-mint to-brand-surface flex items-center justify-center">
+          <BookOpen className="w-12 h-12 text-brand-accent" />
         </div>
       )}
 
       {article.category && (
         <div className="absolute top-3 left-3">
-          <Badge variant="primary">{article.category}</Badge>
+          <Badge variant="mint">{article.category}</Badge>
         </div>
       )}
     </div>
 
     <div className="p-6 flex-1 flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <span className="flex items-center gap-1 text-gray-600 text-sm">
+        <span className="flex items-center gap-1 text-text-secondary text-sm">
           <Calendar className="w-4 h-4" /> {formatDate(article.created_at)}
         </span>
-        <span className="flex items-center gap-1 text-gray-600 text-sm">
+        <span className="flex items-center gap-1 text-text-secondary text-sm">
           <Clock className="w-4 h-4" /> {Math.ceil(article.content.length / 1000)} min
         </span>
       </div>
 
-      <h3 className="text-xl font-semibold mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+      <h3 className="text-xl font-semibold mb-3 line-clamp-2 group-hover:text-brand-accent transition-colors text-text-primary">
         {article.title}
       </h3>
 
-      <p className="text-gray-600 mb-4 line-clamp-3">
+      <p className="text-text-secondary mb-4 line-clamp-3">
         {article.excerpt || article.content.substring(0, 130)}...
       </p>
 
-      <div className="mt-auto flex items-center justify-between pt-4 border-t">
-        <span className="flex items-center gap-1 text-gray-600 text-sm">
+      <div className="mt-auto flex items-center justify-between pt-4 border-t border-brand-grey">
+        <span className="flex items-center gap-1 text-text-secondary text-sm">
           <Eye className="w-4 h-4" /> {article.views || 0}
         </span>
-        <span className="flex items-center gap-1 text-gray-600 text-sm">
+        <span className="flex items-center gap-1 text-text-secondary text-sm">
           <Heart className="w-4 h-4" /> {article.likes || 0}
         </span>
         <Link to={`/blog/${article.id}`}>
-          <Button variant="link" className="text-blue-600">Lire</Button>
+          <Button variant="outline" size="sm">Lire</Button>
         </Link>
       </div>
     </div>

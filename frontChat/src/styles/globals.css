@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,34 +11,75 @@
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Pattern de points subtil pour l'effet cahier */
     background-image:
-      radial-gradient(circle at 1px 1px, rgba(28,28,28,0.05) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(28,28,28,0.02), rgba(28,28,28,0.02));
+      radial-gradient(circle at 1px 1px, rgba(28,28,28,0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(28,28,28,0.01), rgba(28,28,28,0.01));
     background-size: 24px 24px, 100% 100%;
     background-attachment: fixed;
+    min-height: 100vh;
   }
 
   code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
+    font-family: 'source-code-pro', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl font-extrabold text-text-primary;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold text-text-primary;
+  }
+
+  h3 {
+    @apply text-xl font-bold text-text-primary;
+  }
+
+  p {
+    @apply text-base text-text-primary;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-accent text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md transition duration-200;
+    @apply bg-brand-accent text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent;
   }
 
   .btn-secondary {
-    @apply bg-white text-brand-slate px-6 py-3 rounded-lg font-semibold border border-brand-slate/40 hover:bg-brand-mint/20 transition duration-200;
+    @apply bg-white text-brand-slate px-6 py-3 rounded-lg font-semibold border border-brand-slate/40 hover:bg-brand-mint/40 hover:shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-slate;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border border-brand-slate/30 text-brand-slate px-6 py-3 rounded-lg font-semibold hover:bg-brand-mint/10 hover:border-brand-mint transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-slate;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500;
+  }
+
+  .btn-success {
+    @apply bg-brand-mint text-brand-slate px-6 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-mint;
   }
 
   .card {
     @apply bg-white rounded-xl shadow-card p-6 border-l-4 border-brand-mint hover:shadow-lg transition duration-300;
   }
 
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-r from-brand-mint to-brand-surface rounded-xl shadow-card p-6;
+  }
+
   .input-field {
-    @apply w-full px-4 py-3 border border-brand-grey rounded-lg focus:outline-none focus:border-brand-slate transition duration-200 bg-white;
+    @apply w-full px-4 py-3 border border-brand-grey rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-slate focus:border-transparent transition duration-200 bg-white text-text-primary;
+  }
+
+  .input-field::placeholder {
+    color: #616161;
   }
 
   .gradient-text {
@@ -47,15 +90,33 @@
     @apply relative bg-white rounded-lg border border-brand-grey/60 shadow-sm p-4 font-mono text-sm text-text-primary; 
     background-image: repeating-linear-gradient(
       to bottom,
-      rgba(187, 213, 208, 0.18) 0px,
-      rgba(187, 213, 208, 0.18) 28px,
+      rgba(187, 213, 208, 0.15) 0px,
+      rgba(187, 213, 208, 0.15) 28px,
       transparent 28px,
       transparent 56px
     );
+    background-size: 100% 56px;
   }
 
   .copy-button {
-    @apply absolute top-2 right-2 px-2 py-1 text-xs rounded-md border border-brand-slate/30 text-brand-slate bg-white hover:bg-brand-mint/30 transition;
+    @apply absolute top-2 right-2 px-2 py-1 text-xs rounded-md border border-brand-slate/30 text-brand-slate bg-white hover:bg-brand-mint/30 transition duration-200;
+  }
+
+  /* Sticky note effect */
+  .sticky-note {
+    @apply absolute bg-white border-2 border-brand-mint/40 rounded-lg p-4 shadow-md;
+    transform: rotate(-6deg);
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .sticky-note:nth-child(2) {
+    transform: rotate(4deg);
+    animation-delay: 0.1s;
+  }
+
+  .sticky-note:nth-child(3) {
+    transform: rotate(-3deg);
+    animation-delay: 0.2s;
   }
 }
 
@@ -67,14 +128,20 @@
   .animate-slide-up {
     animation: slideUp 0.5s ease-out;
   }
+
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -89,20 +156,40 @@
   }
 }
 
-/* Scrollbar personnalisé */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+/* Scrollbar personnalisé avec thème cahier */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F2F2EF;
+  background: #FCFCF7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(47,79,79,0.7), rgba(47,79,79,0.5));
+  background: linear-gradient(180deg, rgba(47,79,79,0.6), rgba(47,79,79,0.4));
   border-radius: 5px;
+  border: 2px solid #FCFCF7;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, rgba(47,79,79,0.8), rgba(47,79,79,0.6));
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(187, 213, 208, 0.3);
+  color: #1C1C1C;
 }

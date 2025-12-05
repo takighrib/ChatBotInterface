@@ -40,11 +40,10 @@ const Input = ({
           disabled={disabled}
           required={required}
           className={`
-            w-full px-4 py-3 border rounded-lg transition duration-200
-            focus:outline-none focus:ring-2 focus:ring-brand-slate focus:border-transparent
+            input-field
             ${icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500' : 'border-brand-grey'}
-            ${disabled ? 'bg-brand-paper cursor-not-allowed' : 'bg-white'}
+            ${error ? 'border-red-500 focus:ring-red-500' : ''}
+            ${disabled ? 'bg-brand-paper cursor-not-allowed opacity-50' : ''}
           `}
           {...props}
         />
@@ -93,11 +92,10 @@ export const TextArea = ({
         disabled={disabled}
         required={required}
         className={`
-          w-full px-4 py-3 border rounded-lg transition duration-200
-          focus:outline-none focus:ring-2 focus:ring-brand-slate focus:border-transparent
+          input-field
           resize-none
-          ${error ? 'border-red-500' : 'border-brand-grey'}
-          ${disabled ? 'bg-brand-paper cursor-not-allowed' : 'bg-white'}
+          ${error ? 'border-red-500 focus:ring-red-500' : ''}
+          ${disabled ? 'bg-brand-paper cursor-not-allowed opacity-50' : ''}
         `}
         {...props}
       />

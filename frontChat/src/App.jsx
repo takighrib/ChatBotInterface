@@ -23,6 +23,7 @@ import ImageRecognitionPage from '@pages/ImageRecognitionPage';
 import TextClassificationPage from '@pages/TextClassificationPage';
 import DocumentationPage from '@pages/DocumentationPage';
 import ExperimentationPage from '@pages/ExperimentationPage';
+import AlgorithmsPage from '@pages/AlgorithmsPage';
 import AboutPage from '@pages/AboutPage';
 import DecisionTreePage from '@pages/DecisionTreePage';
 import KMeansPage from '@pages/KMeansPage';
@@ -84,6 +85,9 @@ const AppContent = () => {
           } />
           <Route path={ROUTES.DOCUMENTATION} element={
             <ProtectedRoute><DocumentationPage /></ProtectedRoute>
+          } />
+          <Route path={ROUTES.ALGORITHMS} element={
+            <ProtectedRoute><AlgorithmsPage /></ProtectedRoute>
           } />
           <Route path={ROUTES.LINEAR_REGRESSION} element={
             <ProtectedRoute><LinearRegressionPage /></ProtectedRoute>

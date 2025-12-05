@@ -24,11 +24,11 @@ const Button = ({
   const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
 
   const variants = {
-    primary: 'bg-brand-accent text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 focus:ring-brand-accent',
-    secondary: 'bg-white text-brand-slate border border-brand-slate/40 hover:bg-brand-mint/20 focus:ring-brand-slate',
-    outline: 'bg-transparent border border-brand-slate/30 text-brand-slate hover:bg-brand-mint/10 focus:ring-brand-slate',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-    success: 'bg-brand-mint text-brand-slate hover:shadow-md focus:ring-brand-mint'
+    primary: 'bg-brand-accent text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 focus:ring-brand-accent active:translate-y-0',
+    secondary: 'bg-white text-brand-slate border border-brand-slate/40 hover:bg-brand-mint/40 hover:shadow-md focus:ring-brand-slate active:translate-y-0',
+    outline: 'bg-transparent border border-brand-slate/30 text-brand-slate hover:bg-brand-mint/10 hover:border-brand-mint focus:ring-brand-slate',
+    danger: 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md hover:-translate-y-0.5 focus:ring-red-500 active:translate-y-0',
+    success: 'bg-brand-mint text-brand-slate hover:shadow-md hover:-translate-y-0.5 focus:ring-brand-mint active:translate-y-0'
   };
 
   const sizes = {

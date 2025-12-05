@@ -41,9 +41,18 @@ class RegisterResponse(BaseModel):
 
 # ============ FONCTIONS UTILITAIRES ============
 def hash_password(password: str) -> str:
+    # Bcrypt a une limitation de 72 bytes, on tronque si nécessaire
+    # Convertir en bytes pour vérifier la longueur
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        password = password_bytes[:72].decode('utf-8', errors='ignore')
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Bcrypt a une limitation de 72 bytes, on tronque si nécessaire
+    password_bytes = plain_password.encode('utf-8')
+    if len(password_bytes) > 72:
+        plain_password = password_bytes[:72].decode('utf-8', errors='ignore')
     return pwd_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

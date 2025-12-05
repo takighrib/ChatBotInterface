@@ -5,6 +5,7 @@ export const ROUTES = {
   TEXT_CLASSIFICATION: '/text-classification',
   DOCUMENTATION: '/documentation',
   EXPERIMENTATION: '/experimentation',
+  ALGORITHMS: '/algorithms',
   LINEAR_REGRESSION: '/linear-regression',
   DECISION_TREE: '/decision-tree',
   KMEANS: '/kmeans',
@@ -33,6 +34,11 @@ export const NAV_ITEMS = [
     icon: 'MessageSquare'
   },
   {
+    name: 'Algorithmes',
+    path: ROUTES.ALGORITHMS,
+    icon: 'Brain'
+  },
+  {
     name: 'Images',
     path: ROUTES.IMAGE_RECOGNITION,
     icon: 'Image'
@@ -51,11 +57,6 @@ export const NAV_ITEMS = [
     name: 'Docs',
     path: ROUTES.DOCUMENTATION,
     icon: 'BookOpen'
-  },
-  {
-    name: 'À propos',
-    path: ROUTES.ABOUT,
-    icon: 'Info'
   },
   {
     name: 'Blog',

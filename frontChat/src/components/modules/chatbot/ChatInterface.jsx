@@ -39,14 +39,14 @@ const ChatInterface = ({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-200px)] bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-200px)] bg-white rounded-xl shadow-card overflow-hidden border-l-4 border-brand-mint">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-brand-grey bg-gradient-to-r from-brand-mint/20 to-brand-surface">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-text-primary">
             Chatbot IA {isHistoryMode && historyView?.topic ? `· ${historyView.topic}` : ''}
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-text-secondary">
             {isHistoryMode
               ? 'Consultation d\'une conversation sauvegardée'
               : 'Pose tes questions sur l\'intelligence artificielle'}
@@ -87,13 +87,13 @@ const ChatInterface = ({
       </div>
 
       {isHistoryMode && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-6 py-3 text-sm text-yellow-900">
+        <div className="bg-brand-mint/20 border-l-4 border-brand-accent px-6 py-3 text-sm text-text-primary">
           Vous consultez l'historique du sujet <strong>{historyView?.topic || 'inconnu'}</strong>. Les messages sont en lecture seule.
         </div>
       )}
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-white to-gray-50">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-brand-paper">
         {displayedMessages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
@@ -106,11 +106,11 @@ const ChatInterface = ({
 
         {loading && !isHistoryMode && (
           <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-brand-slate flex items-center justify-center">
               <Loader size="sm" />
             </div>
-            <div className="bg-gray-100 rounded-2xl px-4 py-3">
-              <p className="text-gray-600">L'IA réfléchit...</p>
+            <div className="bg-white rounded-2xl px-4 py-3 shadow-card">
+              <p className="text-text-secondary">L'IA réfléchit...</p>
             </div>
           </div>
         )}

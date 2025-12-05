@@ -9,11 +9,36 @@ import {
   Brain,
   CheckCircle,
   Lock,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
+import Card from '@components/common/Card';
+import Badge from '@components/common/Badge';
+import Button from '@components/common/Button';
 
 const AlgorithmsPage = () => {
-  const { progress } = useUserProgress();
+  // Récupération du contexte avec valeurs par défaut
+  let progress = {};
+  try {
+    const { progress: userProgress } = useUserProgress();
+    progress = userProgress || {};
+  } catch (error) {
+    // Si le contexte n'est pas disponible, utiliser des valeurs par défaut
+    console.warn('UserProgressContext not available, using defaults');
+    progress = {
+      completedAlgorithms: [],
+      experimentsCompleted: 0,
+      totalExperiments: 0,
+      totalTimeSpent: 0,
+      quizScores: {}
+    };
+  }
+
+  // Valeurs par défaut pour éviter les erreurs
+  const completedAlgorithms = progress.completedAlgorithms || [];
+  const experimentsCompleted = progress.experimentsCompleted || progress.totalExperiments || 0;
+  const totalTimeSpent = progress.totalTimeSpent || 0;
+  const quizScores = progress.quizScores || {};
 
   const algorithms = [
     {
@@ -23,7 +48,7 @@ const AlgorithmsPage = () => {
       category: 'Clustering',
       difficulty: 'Débutant',
       icon: GitBranch,
-      color: '#00f5ff',
+      color: 'from-cyan-400 to-blue-500',
       route: ROUTES.KMEANS,
       available: true,
       features: [
@@ -40,7 +65,7 @@ const AlgorithmsPage = () => {
       category: 'Régression',
       difficulty: 'Débutant',
       icon: TrendingUp,
-      color: '#ff00ff',
+      color: 'from-purple-400 to-pink-500',
       route: ROUTES.LINEAR_REGRESSION,
       available: true,
       features: [
@@ -57,7 +82,7 @@ const AlgorithmsPage = () => {
       category: 'Classification',
       difficulty: 'Intermédiaire',
       icon: Binary,
-      color: '#00ff88',
+      color: 'from-green-400 to-emerald-500',
       route: ROUTES.DECISION_TREE,
       available: true,
       features: [
@@ -74,9 +99,9 @@ const AlgorithmsPage = () => {
       category: 'Deep Learning',
       difficulty: 'Avancé',
       icon: Brain,
-      color: '#ffaa00',
+      color: 'from-orange-400 to-amber-500',
       route: ROUTES.NEURAL_NETWORK,
-      available: false,
+      available: true,
       features: [
         'Architecture personnalisable',
         'Backpropagation visualisée',
@@ -87,286 +112,154 @@ const AlgorithmsPage = () => {
   ];
 
   const isCompleted = (algorithmId) => {
-    return progress.completedAlgorithms.includes(algorithmId);
+    return completedAlgorithms.includes(algorithmId);
   };
 
   const getQuizScore = (algorithmId) => {
-    return progress.quizScores[algorithmId] || null;
+    return quizScores[algorithmId] || null;
+  };
+
+  const getDifficultyColor = (difficulty) => {
+    switch(difficulty) {
+      case 'Débutant': return 'success';
+      case 'Intermédiaire': return 'accent';
+      case 'Avancé': return 'danger';
+      default: return 'mint';
+    }
   };
 
   return (
-    <div style={{
-      minHeight: 'calc(100vh - 200px)',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
-      padding: '3rem 2rem'
-    }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{
-            fontSize: '3.5rem',
-            fontWeight: '800',
-            background: 'linear-gradient(135deg, #00f5ff 0%, #ff00ff 50%, #00ff88 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            marginBottom: '1rem',
-            fontFamily: "'Space Mono', monospace"
-          }}>
+    <div className="min-h-screen bg-brand-paper py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header amélioré */}
+        <div className="text-center mb-12 animate-fade-in">
+          <div className="inline-flex items-center justify-center mb-6">
+            <div className="bg-brand-mint/30 p-3 rounded-full">
+              <Brain className="w-12 h-12 text-brand-accent" />
+            </div>
+          </div>
+          <Badge variant="mint" size="lg" className="mb-4">
+            <Sparkles className="w-4 h-4 mr-2" />
             Bibliothèque d'Algorithmes
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary mb-4">
+            Explorez les Algorithmes ML
           </h1>
-          <p style={{
-            fontSize: '1.2rem',
-            color: '#94a3b8',
-            maxWidth: '700px',
-            margin: '0 auto',
-            fontFamily: "'Inter', sans-serif"
-          }}>
-            Explorez et maîtrisez les algorithmes de Machine Learning avec des visualisations interactives
+          <p className="text-lg text-text-secondary max-w-3xl mx-auto">
+            Découvrez et maîtrisez les algorithmes de Machine Learning avec des visualisations interactives 
+            et des explications détaillées adaptées à tous les niveaux.
           </p>
         </div>
 
-        {/* Stats */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '3rem'
-        }}>
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.6)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '15px',
-            padding: '1.5rem',
-            border: '2px solid rgba(0, 245, 255, 0.2)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2.5rem',
-              fontWeight: '800',
-              color: '#00f5ff',
-              marginBottom: '0.5rem'
-            }}>
-              {progress.completedAlgorithms.length}
+        {/* Stats améliorées */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <Card className="text-center border-l-4 border-cyan-400">
+            <div className="text-4xl font-extrabold text-cyan-500 mb-2">
+              {completedAlgorithms.length}
             </div>
-            <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+            <div className="text-text-secondary font-medium">
               Algorithmes complétés
             </div>
-          </div>
+          </Card>
 
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.6)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '15px',
-            padding: '1.5rem',
-            border: '2px solid rgba(255, 0, 255, 0.2)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2.5rem',
-              fontWeight: '800',
-              color: '#ff00ff',
-              marginBottom: '0.5rem'
-            }}>
-              {progress.experimentsCompleted}
+          <Card className="text-center border-l-4 border-purple-400">
+            <div className="text-4xl font-extrabold text-purple-500 mb-2">
+              {experimentsCompleted}
             </div>
-            <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+            <div className="text-text-secondary font-medium">
               Expériences réalisées
             </div>
-          </div>
+          </Card>
 
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.6)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '15px',
-            padding: '1.5rem',
-            border: '2px solid rgba(0, 255, 136, 0.2)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '2.5rem',
-              fontWeight: '800',
-              color: '#00ff88',
-              marginBottom: '0.5rem'
-            }}>
-              {Math.round(progress.totalTimeSpent)}
+          <Card className="text-center border-l-4 border-green-400">
+            <div className="text-4xl font-extrabold text-green-500 mb-2">
+              {Math.round(totalTimeSpent)}
             </div>
-            <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+            <div className="text-text-secondary font-medium">
               Minutes d'apprentissage
             </div>
-          </div>
+          </Card>
         </div>
 
-        {/* Algorithms Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-          gap: '2rem'
-        }}>
-          {algorithms.map(algorithm => {
+        {/* Algorithms Grid amélioré */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {algorithms.map((algorithm, index) => {
             const Icon = algorithm.icon;
             const completed = isCompleted(algorithm.id);
             const score = getQuizScore(algorithm.id);
 
             return (
-              <div
+              <Card
                 key={algorithm.id}
+                className="relative overflow-hidden hover:shadow-xl transition-all duration-300 group border-l-4"
                 style={{
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  backdropFilter: 'blur(10px)',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  border: `2px solid ${algorithm.color}40`,
-                  position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'all 0.3s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-5px)';
-                  e.currentTarget.style.boxShadow = `0 10px 40px ${algorithm.color}40`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  borderLeftColor: algorithm.available 
+                    ? (algorithm.color.includes('cyan') ? '#22d3ee' : 
+                       algorithm.color.includes('purple') ? '#a855f7' : 
+                       algorithm.color.includes('green') ? '#4ade80' : '#f97316')
+                    : '#9ca3af'
                 }}
               >
+                {/* Background gradient subtil */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${algorithm.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+
+                <div className="relative z-10">
                 {/* Status Badge */}
-                {!algorithm.available && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: 'rgba(255, 170, 0, 0.2)',
-                    color: '#ffaa00',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    fontWeight: '700',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <Lock size={14} />
+                  <div className="absolute top-4 right-4">
+                    {!algorithm.available ? (
+                      <Badge variant="slate" size="sm" className="flex items-center gap-1">
+                        <Lock className="w-3 h-3" />
                     Bientôt
+                      </Badge>
+                    ) : completed ? (
+                      <Badge variant="success" size="sm" className="flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" />
+                        Complété
+                      </Badge>
+                    ) : null}
                   </div>
-                )}
 
-                {completed && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: 'rgba(0, 255, 136, 0.2)',
-                    color: '#00ff88',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    fontWeight: '700',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <CheckCircle size={14} />
-                    Complété
-                  </div>
-                )}
-
-                {/* Icon */}
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '15px',
-                  background: `${algorithm.color}20`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1.5rem'
-                }}>
-                  <Icon size={30} color={algorithm.color} />
+                  {/* Icon avec gradient */}
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${algorithm.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="w-8 h-8 text-white" />
                 </div>
 
                 {/* Content */}
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '700',
-                  color: '#e2e8f0',
-                  marginBottom: '0.5rem',
-                  fontFamily: "'Space Mono', monospace"
-                }}>
+                  <h3 className="text-xl font-bold text-text-primary mb-2">
                   {algorithm.name}
                 </h3>
 
-                <div style={{
-                  display: 'flex',
-                  gap: '0.5rem',
-                  marginBottom: '1rem'
-                }}>
-                  <span style={{
-                    padding: '0.25rem 0.75rem',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: '15px',
-                    fontSize: '0.8rem',
-                    color: '#94a3b8'
-                  }}>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge variant="mint" size="sm">
                     {algorithm.category}
-                  </span>
-                  <span style={{
-                    padding: '0.25rem 0.75rem',
-                    background: `${algorithm.color}20`,
-                    borderRadius: '15px',
-                    fontSize: '0.8rem',
-                    color: algorithm.color
-                  }}>
+                    </Badge>
+                    <Badge variant={getDifficultyColor(algorithm.difficulty)} size="sm">
                     {algorithm.difficulty}
-                  </span>
+                    </Badge>
                 </div>
 
-                <p style={{
-                  color: '#94a3b8',
-                  fontSize: '0.95rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1.5rem'
-                }}>
+                  <p className="text-text-secondary mb-4 text-sm leading-relaxed">
                   {algorithm.description}
                 </p>
 
                 {/* Features */}
-                <ul style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: '0 0 1.5rem 0',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.5rem'
-                }}>
+                  <ul className="space-y-2 mb-4">
                   {algorithm.features.map((feature, idx) => (
-                    <li key={idx} style={{
-                      color: '#cbd5e1',
-                      fontSize: '0.85rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem'
-                    }}>
-                      <div style={{
-                        width: '4px',
-                        height: '4px',
-                        borderRadius: '50%',
-                        background: algorithm.color
-                      }} />
-                      {feature}
+                      <li key={idx} className="flex items-start text-sm text-text-secondary">
+                        <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${algorithm.color} mt-2 mr-2 flex-shrink-0`} />
+                        <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 {/* Score */}
-                {score !== null && (
-                  <div style={{
-                    padding: '0.75rem',
-                    background: 'rgba(0, 255, 136, 0.1)',
-                    borderRadius: '10px',
-                    marginBottom: '1rem',
-                    textAlign: 'center'
-                  }}>
-                    <span style={{ color: '#00ff88', fontWeight: '700' }}>
+                  {score !== null && score !== undefined && (
+                    <div className={`mb-4 p-3 rounded-lg bg-gradient-to-r ${algorithm.color} bg-opacity-10 border border-opacity-20 text-center`}>
+                      <span className="text-sm font-semibold" style={{ 
+                        color: algorithm.color.includes('cyan') ? '#06b6d4' : 
+                               algorithm.color.includes('purple') ? '#9333ea' : 
+                               algorithm.color.includes('green') ? '#10b981' : '#f97316'
+                      }}>
                       Score du quiz: {score}%
                     </span>
                   </div>
@@ -374,47 +267,49 @@ const AlgorithmsPage = () => {
 
                 {/* Button */}
                 {algorithm.available ? (
-                  <Link to={algorithm.route} style={{ textDecoration: 'none' }}>
-                    <button style={{
-                      width: '100%',
-                      padding: '1rem',
-                      background: `linear-gradient(135deg, ${algorithm.color}, ${algorithm.color}cc)`,
-                      color: '#000',
-                      border: 'none',
-                      borderRadius: '12px',
-                      fontWeight: '700',
-                      fontSize: '1rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
-                      transition: 'all 0.3s',
-                      fontFamily: "'Space Mono', monospace"
-                    }}>
+                    <Link to={algorithm.route} className="block">
+                      <Button
+                        variant="primary"
+                        className="w-full bg-gradient-to-r from-brand-accent to-brand-accent/80 hover:from-brand-accent/90 hover:to-brand-accent/70"
+                        icon={<ArrowRight className="w-4 h-4" />}
+                      >
                       Commencer
-                      <ArrowRight size={20} />
-                    </button>
+                      </Button>
                   </Link>
                 ) : (
-                  <button style={{
-                    width: '100%',
-                    padding: '1rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    color: '#64748b',
-                    border: '2px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    fontWeight: '700',
-                    fontSize: '1rem',
-                    cursor: 'not-allowed',
-                    fontFamily: "'Space Mono', monospace"
-                  }}>
+                    <Button
+                      variant="outline"
+                      disabled
+                      className="w-full opacity-50 cursor-not-allowed"
+                    >
                     Bientôt disponible
-                  </button>
+                    </Button>
                 )}
               </div>
+              </Card>
             );
           })}
+        </div>
+
+        {/* Call to Action */}
+        <div className="mt-12 text-center">
+          <Card className="bg-gradient-to-r from-brand-mint to-brand-surface border-l-4 border-brand-accent">
+            <h3 className="text-2xl font-bold text-text-primary mb-2">
+              Prêt à commencer ?
+            </h3>
+            <p className="text-text-secondary mb-6">
+              Choisissez un algorithme ci-dessus pour commencer votre apprentissage interactif
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button
+                variant="primary"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                icon={<ArrowRight className="w-4 h-4" />}
+              >
+                Voir les algorithmes
+              </Button>
+            </div>
+          </Card>
         </div>
       </div>
     </div>

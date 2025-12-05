@@ -16,7 +16,7 @@ const Footer = () => {
               <div className="bg-brand-mint p-2 rounded-lg shadow-card">
                 <Sparkles className="w-5 h-5 text-brand-slate" />
               </div>
-              <span className="text-xl font-bold text-text-primary">IA Jeunes</span>
+              <span className="text-xl font-bold text-text-primary">EduAI</span>
             </div>
             <p className="max-w-md">
               Une plateforme pédagogique inspirée des carnets d'étudiants, pour apprendre l'IA avec clarté et sérénité.

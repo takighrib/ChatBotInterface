@@ -8,18 +8,27 @@ export default {
     extend: {
       colors: {
         brand: {
-          paper: "#F8F9FA",   // pour bg-brand-paper
-          accent: "#4F8A8B",
-          slate: "#2F4F4F",
-          mint: "#BBE5C2",
-          grey: "#D3D3D3",
+          slate: "#2F4F4F",      // Couleur principale - gris ardoise foncé
+          accent: "#D9822B",      // Couleur d'accent - orange/terre
+          paper: "#FCFCF7",      // Fond principal - papier crème
+          surface: "#FFFFFF",    // Surfaces blanches
+          mint: "#BBD5D0",       // Mint vert - pour les accents et hover
+          grey: "#E0E0E0",       // Gris clair pour les bordures
         },
         text: {
-          primary: "#1A1A1A",
+          primary: "#1C1C1C",    // Texte principal - presque noir
+          secondary: "#616161",   // Texte secondaire - gris moyen
         },
       },
+      fontFamily: {
+        sans: ['Poppins', 'Inter', 'Nunito', 'system-ui', 'sans-serif'],
+      },
       boxShadow: {
-        card: "0 4px 10px rgba(0,0,0,0.08)",
+        card: "0 1px 0 rgba(28,28,28,0.04), 0 4px 12px rgba(28,28,28,0.06)",
+      },
+      borderRadius: {
+        md: '10px',
+        lg: '12px',
       },
     },
   },
