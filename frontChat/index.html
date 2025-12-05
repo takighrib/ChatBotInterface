@@ -8,6 +8,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // S'assurer que le body n'est jamais bloqué
+      document.body.style.overflow = '';
+      document.body.style.overflow = 'unset';
+      
+      // Fonction de secours globale pour débloquer la page
+      window.fixPageBlocking = function() {
+        document.body.style.overflow = '';
+        document.body.style.overflow = 'unset';
+        localStorage.setItem('user_settings', JSON.stringify({ onboarded: true }));
+        const modals = document.querySelectorAll('[class*="fixed"][class*="inset-0"]');
+        modals.forEach(m => m.style.display = 'none');
+        console.log('✅ Page débloquée !');
+        location.reload();
+      };
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

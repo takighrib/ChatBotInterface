@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from typing import Optional
@@ -17,7 +17,6 @@ SECRET_KEY = "your-secret-key-CHANGE-THIS-IN-PRODUCTION"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 # ============ MODÈLES ============
@@ -41,19 +40,37 @@ class RegisterResponse(BaseModel):
 
 # ============ FONCTIONS UTILITAIRES ============
 def hash_password(password: str) -> str:
-    # Bcrypt a une limitation de 72 bytes, on tronque si nécessaire
-    # Convertir en bytes pour vérifier la longueur
+    """
+    Hash a password using bcrypt.
+    Bcrypt has a 72-byte limit, so we truncate if necessary.
+    """
+    # Convert to bytes and truncate to 72 bytes if needed
     password_bytes = password.encode('utf-8')
     if len(password_bytes) > 72:
-        password = password_bytes[:72].decode('utf-8', errors='ignore')
-    return pwd_context.hash(password)
+        password_bytes = password_bytes[:72]
+    
+    # Generate salt and hash
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Bcrypt a une limitation de 72 bytes, on tronque si nécessaire
-    password_bytes = plain_password.encode('utf-8')
-    if len(password_bytes) > 72:
-        plain_password = password_bytes[:72].decode('utf-8', errors='ignore')
-    return pwd_context.verify(plain_password, hashed_password)
+    """
+    Verify a password against a bcrypt hash.
+    Bcrypt has a 72-byte limit, so we truncate if necessary.
+    """
+    try:
+        # Convert to bytes and truncate to 72 bytes if needed
+        password_bytes = plain_password.encode('utf-8')
+        if len(password_bytes) > 72:
+            password_bytes = password_bytes[:72]
+        
+        # Verify password
+        hashed_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, hashed_bytes)
+    except Exception as e:
+        print(f"Password verification error: {e}")
+        return False
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()

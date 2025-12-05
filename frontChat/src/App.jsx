@@ -4,6 +4,7 @@ import { AppProvider } from '@context/AppContext';
 import { UserProgressProvider } from '@context/UserProgressContext';
 import { AuthProvider } from '@context/AuthContext';
 import { ROUTES } from '@constants/routes';
+import { fixPageBlocking } from '@utils/fixPageBlocking';
 
 // Layout
 import Header from '@components/common/Header';
@@ -37,16 +38,73 @@ import { useApp } from '@context/AppContext';
 const AppContent = () => {
   const { notifications, removeNotification, user, updateUserSettings } = useApp();
   const [showOnboarding, setShowOnboarding] = React.useState(false);
+  const [onboardingChecked, setOnboardingChecked] = React.useState(false);
+
+  // Ensure page is never blocked on mount
+  React.useEffect(() => {
+    document.body.style.overflow = 'unset';
+    document.body.style.position = 'relative';
+  }, []);
+
+  // Global escape key handler to close any blocking modals
+  React.useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setShowOnboarding(false);
+        document.body.style.overflow = 'unset';
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  // Continuous monitoring to prevent blocking
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (document.body.style.overflow === 'hidden') {
+        document.body.style.overflow = 'unset';
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   React.useEffect(() => {
-    if (!user || !user.onboarded) {
-      setShowOnboarding(true);
+    // Ne vérifier qu'une seule fois au chargement
+    if (!onboardingChecked) {
+      try {
+        const savedSettings = localStorage.getItem('user_settings');
+        if (savedSettings) {
+          const settings = JSON.parse(savedSettings);
+          // Si l'utilisateur a déjà été onboardé, ne pas afficher le modal
+          if (settings && settings.onboarded) {
+            setShowOnboarding(false);
+            setOnboardingChecked(true);
+            return;
+          }
+        }
+        // Sinon, afficher le modal après un court délai pour éviter les problèmes de rendu
+        setTimeout(() => {
+          setShowOnboarding(true);
+        }, 500);
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+        // En cas d'erreur, ne pas afficher le modal pour éviter de bloquer l'interface
+        setShowOnboarding(false);
+      }
+      setOnboardingChecked(true);
     }
-  }, [user]);
+  }, [onboardingChecked]);
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
-    updateUserSettings && updateUserSettings({ onboarded: true });
+    if (updateUserSettings) {
+      updateUserSettings({ onboarded: true });
+    } else {
+      // Fallback si updateUserSettings n'est pas disponible
+      const savedSettings = localStorage.getItem('user_settings');
+      const settings = savedSettings ? JSON.parse(savedSettings) : {};
+      localStorage.setItem('user_settings', JSON.stringify({ ...settings, onboarded: true }));
+    }
   };
 
   return (

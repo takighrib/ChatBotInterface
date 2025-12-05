@@ -1,17 +1,9 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './styles/globals.css'  // Garder seulement celui-ci
+/**
+ * Utilitaire pour débloquer la page en cas de problème
+ * À exécuter dans la console du navigateur si la page est bloquée
+ */
 
-import App from './App.jsx'
-
-// S'assurer que le body n'est jamais bloqué au chargement
-if (document.body) {
-  document.body.style.overflow = '';
-  document.body.style.overflow = 'unset';
-}
-
-// Fonction de secours pour débloquer la page
-window.fixPageBlocking = () => {
+export const fixPageBlocking = () => {
   // 1. Restaurer le scroll du body
   document.body.style.overflow = '';
   document.body.style.overflow = 'unset';
@@ -31,19 +23,16 @@ window.fixPageBlocking = () => {
   const overlays = document.querySelectorAll('[class*="backdrop-blur"]');
   overlays.forEach(overlay => {
     const parent = overlay.closest('[class*="fixed"]');
-    if (parent && parseInt(parent.style.zIndex || '0') >= 40) {
+    if (parent && parent.style.zIndex >= 40) {
       parent.style.display = 'none';
     }
   });
   
   console.log('✅ Page débloquée ! Rafraîchissez la page si nécessaire.');
-  location.reload();
 };
 
+// Exporter pour utilisation dans la console
+if (typeof window !== 'undefined') {
+  window.fixPageBlocking = fixPageBlocking;
+}
 
-
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)

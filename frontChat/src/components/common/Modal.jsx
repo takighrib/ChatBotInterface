@@ -15,15 +15,31 @@ const Modal = ({
   // Empêcher le scroll quand le modal est ouvert
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // Ne JAMAIS bloquer le scroll du body
+      document.body.style.overflow = 'unset';
+      
+      // Auto-fermeture de sécurité après 60 secondes pour éviter le blocage
+      const safetyTimer = setTimeout(() => {
+        console.log('Modal auto-closing after 60s for safety');
+        onClose();
+      }, 60000);
+      
+      return () => {
+        clearTimeout(safetyTimer);
+        document.body.style.overflow = 'unset';
+      };
     } else {
+      // S'assurer que le body n'est jamais bloqué quand le modal est fermé
+      document.body.style.overflow = '';
       document.body.style.overflow = 'unset';
     }
     
     return () => {
+      // Cleanup : toujours restaurer le scroll
+      document.body.style.overflow = '';
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   // Fermer avec la touche Escape
   useEffect(() => {
@@ -37,14 +53,15 @@ const Modal = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
   const sizes = {
     sm: 'max-w-md',
     md: 'max-w-2xl',
     lg: 'max-w-4xl',
     xl: 'max-w-6xl'
   };
+
+  // Ne rien rendre si le modal n'est pas ouvert
+  if (!isOpen) return null;
 
   return (
     <div

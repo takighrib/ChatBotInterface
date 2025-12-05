@@ -246,8 +246,9 @@ const Header = () => {
       {/* Overlay pour fermer le menu utilisateur */}
       {showUserMenu && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 bg-transparent"
           onClick={() => setShowUserMenu(false)}
+          style={{ pointerEvents: showUserMenu ? 'auto' : 'none' }}
         />
       )}
     </header>

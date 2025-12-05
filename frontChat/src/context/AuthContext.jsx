@@ -10,21 +10,48 @@ export const AuthProvider = ({ children }) => {
 
   // Vérifier si l'utilisateur est connecté au chargement
   useEffect(() => {
+    let isMounted = true;
+    
     const initAuth = async () => {
-      const token = authService.getToken();
-      if (token) {
-        try {
-          const userData = await authService.getCurrentUser();
-          setUser(userData);
-        } catch (err) {
-          console.error('Failed to get user:', err);
-          authService.logout();
+      try {
+        const token = authService.getToken();
+        if (token) {
+          try {
+            const userData = await authService.getCurrentUser();
+            if (isMounted) {
+              setUser(userData);
+            }
+          } catch (err) {
+            console.error('Failed to get user:', err);
+            if (isMounted) {
+              authService.logout();
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      } finally {
+        // Toujours mettre loading à false, même en cas d'erreur
+        if (isMounted) {
+          setLoading(false);
         }
       }
-      setLoading(false);
     };
 
+    // Timeout de sécurité pour éviter que loading reste à true indéfiniment
+    const timeout = setTimeout(() => {
+      if (isMounted && loading) {
+        console.warn('Auth loading timeout, setting loading to false');
+        setLoading(false);
+      }
+    }, 3000);
+
     initAuth();
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeout);
+    };
   }, []);
 
   const register = async (email, password) => {

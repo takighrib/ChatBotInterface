@@ -29,6 +29,22 @@ const OnboardingModal = ({ isOpen, onClose }) => {
 
   const step = steps[index];
 
+  // Safety auto-close after 30 seconds
+  React.useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        console.log('Onboarding modal auto-closing after 30s');
+        onClose();
+      }, 30000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, onClose]);
+
+  // Ensure body is never blocked
+  React.useEffect(() => {
+    document.body.style.overflow = 'unset';
+  }, [isOpen]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={null} size="md">
       <div className="space-y-6">
@@ -51,9 +67,19 @@ const OnboardingModal = ({ isOpen, onClose }) => {
             {index < steps.length - 1 ? (
               <Button variant="primary" onClick={next}>Next</Button>
             ) : (
-              <Button variant="primary" onClick={onClose}>Let’s go</Button>
+              <Button variant="primary" onClick={onClose}>Let's go</Button>
             )}
           </div>
+        </div>
+                
+        {/* Skip button */}
+        <div className="pt-4 border-t border-brand-grey/40">
+          <button
+            onClick={onClose}
+            className="text-sm text-text-secondary hover:text-brand-accent transition"
+          >
+            Skip tutorial
+          </button>
         </div>
       </div>
     </Modal>

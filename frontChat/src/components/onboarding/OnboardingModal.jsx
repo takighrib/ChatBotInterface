@@ -29,8 +29,33 @@ const OnboardingModal = ({ isOpen, onClose }) => {
 
   const step = steps[index];
 
+  // Permettre de fermer le modal en cliquant sur l'overlay ou en appuyant sur Escape
+  const handleClose = () => {
+    setIndex(0); // Réinitialiser l'index pour la prochaine fois
+    // Forcer la sauvegarde dans localStorage
+    try {
+      const savedSettings = localStorage.getItem('user_settings');
+      const settings = savedSettings ? JSON.parse(savedSettings) : {};
+      localStorage.setItem('user_settings', JSON.stringify({ ...settings, onboarded: true }));
+    } catch (error) {
+      console.error('Error saving onboarding status:', error);
+    }
+    onClose();
+  };
+
+  // Fermeture automatique après 30 secondes pour éviter de bloquer l'interface
+  React.useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        console.log('Onboarding modal auto-closing after 30s');
+        handleClose();
+      }, 30000);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={null} size="md">
+    <Modal isOpen={isOpen} onClose={handleClose} title={null} size="md" showCloseButton={true}>
       <div className="space-y-6">
         <div className="flex items-center gap-3">
           <div className="bg-brand-mint p-2 rounded-lg shadow-card">{step.icon}</div>
@@ -51,9 +76,19 @@ const OnboardingModal = ({ isOpen, onClose }) => {
             {index < steps.length - 1 ? (
               <Button variant="primary" onClick={next}>Next</Button>
             ) : (
-              <Button variant="primary" onClick={onClose}>Let’s go</Button>
+              <Button variant="primary" onClick={handleClose}>Let's go</Button>
             )}
           </div>
+        </div>
+        
+        {/* Option pour fermer immédiatement */}
+        <div className="pt-4 border-t border-brand-grey/40">
+          <button
+            onClick={handleClose}
+            className="text-sm text-text-secondary hover:text-brand-accent transition"
+          >
+            Skip tutorial
+          </button>
         </div>
       </div>
     </Modal>
