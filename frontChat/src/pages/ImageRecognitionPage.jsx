@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image as ImageIcon, Info, Eye, Cpu, Layers, Sparkles } from 'lucide-react';
 import ImageUploader from '@components/modules/imageRecognition/ImageUploader';
 import ResultDisplay from '@components/modules/imageRecognition/ResultDisplay';
-import ImageInterpretationVisualizer from '@components/modules/imageRecognition/ImageInterpretationVisualizer';
+import AIImageInterpretation from '@components/modules/imageRecognition/AIImageInterpretation';
 import { useImageRecognition } from '@hooks/useImageRecognition';
 import Button from '@components/common/Button';
 import Card from '@components/common/Card';
@@ -164,7 +164,7 @@ const ImageRecognitionPage = () => {
 
         {/* AI Interpretation Visualizer */}
         <div className="mt-8 animate-fade-in">
-          <ImageInterpretationVisualizer isActive={true} />
+          <AIImageInterpretation />
         </div>
 
         {/* Cartes d'information en bas */}
