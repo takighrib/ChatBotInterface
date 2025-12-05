@@ -115,13 +115,13 @@ const ImageRecognitionPage = () => {
                 <Sparkles className="w-5 h-5 text-brand-accent flex-shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-text-primary mb-2">
-                    💡 Astuce
-                  </h3>
+                💡 Astuce
+              </h3>
                   <p className="text-sm text-text-secondary">
-                    Pour de meilleurs résultats, utilise des images claires avec un sujet bien visible. 
-                    L'IA fonctionne mieux avec des photos bien éclairées et nettes.
-                  </p>
-                </div>
+                Pour de meilleurs résultats, utilise des images claires avec un sujet bien visible. 
+                L'IA fonctionne mieux avec des photos bien éclairées et nettes.
+              </p>
+            </div>
               </div>
             </Card>
           </div>
