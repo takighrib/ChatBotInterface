@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileText, Info, Brain, TrendingUp, Target, Sparkles } from 'lucide-react';
 import TextInput from '@components/modules/textClassification/TextInput';
 import ClassificationResult from '@components/modules/textClassification/ClassificationResult';
-import TextInterpretationVisualizer from '@components/modules/textClassification/TextInterpretationVisualizer';
+import AITextInterpretation from '@components/modules/textClassification/AITextInterpretation';
 import { useTextClassification } from '@hooks/useTextClassification';
 import Button from '@components/common/Button';
 import Card from '@components/common/Card';
@@ -31,6 +31,11 @@ const TextClassificationPage = () => {
   return (
     <div className="min-h-screen bg-brand-paper py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        {/* AI Interpretation Visualizer - Main Feature */}
+        <div className="mb-8 animate-fade-in">
+          <AITextInterpretation />
+        </div>
+
         {/* En-tête */}
         <div className="mb-8 animate-fade-in">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
@@ -145,11 +150,6 @@ const TextClassificationPage = () => {
               </Card>
             )}
           </div>
-        </div>
-
-        {/* AI Interpretation Visualizer */}
-        <div className="mt-8 animate-fade-in">
-          <TextInterpretationVisualizer isActive={true} sampleText={text || "L'intelligence artificielle transforme notre monde"} />
         </div>
 
         {/* Cartes d'information en bas */}

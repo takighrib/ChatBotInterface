@@ -6,7 +6,7 @@ import Button from '@components/common/Button';
 import Card from '@components/common/Card';
 import Badge from '@components/common/Badge';
 import Modal from '@components/common/Modal';
-import NeuralNetworkVisualizer from '@components/algorithms/NeuralNetworkVisualizer';
+import NeuralNetworkViz from '@components/algorithms/NeuralNetworkViz';
 
 const NeuralNetworkPage = () => {
   const navigate = useNavigate();
@@ -53,7 +53,9 @@ const NeuralNetworkPage = () => {
       </div>
 
       {/* Visualisation Interactive */}
-      <NeuralNetworkVisualizer />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <NeuralNetworkViz />
+      </div>
 
       {/* Modal d'information */}
       <Modal
