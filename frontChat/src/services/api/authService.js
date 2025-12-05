@@ -38,7 +38,16 @@ export const authService = {
   },
 
   logout() {
+    // Supprimer le token
     localStorage.removeItem('token');
+    
+    // Nettoyer toutes les données d'authentification
+    // Note: On garde les autres données (settings, progress) pour permettre la réutilisation
+    // Si vous voulez tout nettoyer, décommentez les lignes suivantes :
+    // localStorage.removeItem('user_settings');
+    // localStorage.removeItem('user_progress');
+    // localStorage.removeItem('chat_history');
+    // localStorage.removeItem('chat_sessions');
   },
 
   async getCurrentUser() {

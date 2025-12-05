@@ -80,8 +80,32 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    authService.logout();
-    setUser(null);
+    try {
+      // 1. Nettoyer le service d'authentification (supprime le token)
+      authService.logout();
+      
+      // 2. Réinitialiser complètement l'état utilisateur
+      setUser(null);
+      setError(null);
+      setLoading(false);
+      
+      // 3. S'assurer que le body n'est pas bloqué
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = 'unset';
+      }
+      
+      console.log('✅ Logout successful - User logged out');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Même en cas d'erreur, nettoyer l'état local
+      setUser(null);
+      setError(null);
+      setLoading(false);
+      authService.logout(); // Forcer le nettoyage
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = 'unset';
+      }
+    }
   };
 
   const value = {

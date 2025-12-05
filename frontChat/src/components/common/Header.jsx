@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Menu, X, LogOut, User, Brain, ChevronDown } from 'lucide-react';
-import { NAV_ITEMS } from '@constants/routes';
+import { NAV_ITEMS, ROUTES } from '@constants/routes';
 import { useAuth } from '@context/AuthContext';
 
 const Header = () => {
@@ -23,10 +23,25 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
-    setShowUserMenu(false);
-    setMobileMenuOpen(false);
-    navigate('/login');
+    try {
+      // Fermer les menus immédiatement
+      setShowUserMenu(false);
+      setMobileMenuOpen(false);
+      
+      // S'assurer que le body n'est pas bloqué
+      document.body.style.overflow = 'unset';
+      
+      // Effectuer la déconnexion
+      logout();
+      
+      // Rediriger vers la page de connexion avec replace pour éviter le retour en arrière
+      navigate(ROUTES.LOGIN, { replace: true });
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Même en cas d'erreur, nettoyer et rediriger
+      logout();
+      navigate(ROUTES.LOGIN, { replace: true });
+    }
   };
 
   const onHome = location.pathname === '/';
